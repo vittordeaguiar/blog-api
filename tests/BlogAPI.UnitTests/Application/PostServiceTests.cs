@@ -16,7 +16,6 @@ public class PostServiceTests
     private readonly Mock<IPostRepository> _postRepositoryMock;
     private readonly Mock<IUserRepository> _userRepositoryMock;
     private readonly Mock<ICategoryRepository> _categoryRepositoryMock;
-    private readonly IMapper _mapper;
     private readonly PostService _postService;
 
     public PostServiceTests()
@@ -25,20 +24,18 @@ public class PostServiceTests
         _userRepositoryMock = new Mock<IUserRepository>();
         _categoryRepositoryMock = new Mock<ICategoryRepository>();
 
-        // Real AutoMapper for testing
         var config = new MapperConfiguration(cfg => cfg.AddProfile<PostMappingProfile>());
-        _mapper = config.CreateMapper();
+        var mapper = config.CreateMapper();
 
         _postService = new PostService(
             _postRepositoryMock.Object,
             _userRepositoryMock.Object,
             _categoryRepositoryMock.Object,
-            _mapper
+            mapper
         );
     }
 
-    // Helper method
-    private Post CreateTestPost(string title, string content, string slug, Guid? authorId = null)
+    private static Post CreateTestPost(string title, string content, string slug, Guid? authorId = null)
     {
         var author = new User("Test Author", "test@example.com", "hash", "Author");
         var post = new Post(title, content, slug, authorId ?? author.Id);
@@ -51,23 +48,19 @@ public class PostServiceTests
     [Fact]
     public async Task CreatePostAsync_WithValidData_CreatesPost()
     {
-        // Arrange
         var dto = new CreatePostDto("Test Post Title", "Valid content with more than 10 characters", "test-post-title");
         var authorId = Guid.NewGuid();
         var author = new User("John Doe", "john@example.com", "hash", "Author");
 
         _userRepositoryMock.Setup(r => r.GetByIdAsync(authorId)).ReturnsAsync(author);
 
-        Post? capturedPost = null;
         _postRepositoryMock
             .Setup(r => r.AddAsync(It.IsAny<Post>()))
-            .Callback<Post>(p => capturedPost = p)
+            .Callback<Post>(p => _ = p)
             .ReturnsAsync((Post p) => p);
 
-        // Act
         var result = await _postService.CreatePostAsync(dto, authorId);
 
-        // Assert
         result.Should().NotBeNull();
         result.Title.Should().Be(dto.Title);
         result.Content.Should().Be(dto.Content);
@@ -80,96 +73,75 @@ public class PostServiceTests
     [Fact]
     public async Task CreatePostAsync_WithNonExistentAuthor_ThrowsException()
     {
-        // Arrange
         var dto = new CreatePostDto("Test Post", "Test content with enough characters", "test-post");
         var authorId = Guid.NewGuid();
 
         _userRepositoryMock.Setup(r => r.GetByIdAsync(authorId)).ReturnsAsync((User?)null);
 
-        // Act
         var act = async () => await _postService.CreatePostAsync(dto, authorId);
 
-        // Assert
-        await act.Should().ThrowAsync<DomainException>()
-            .WithMessage("Author not found");
+        await act.Should().ThrowAsync<DomainException>().WithMessage("Author not found");
     }
 
     [Fact]
     public async Task CreatePostAsync_WithEmptyTitle_ThrowsDomainException()
     {
-        // Arrange
         var dto = new CreatePostDto("", "Valid content with enough characters", "valid-slug");
         var authorId = Guid.NewGuid();
         var author = new User("John Doe", "john@example.com", "hash", "Author");
 
         _userRepositoryMock.Setup(r => r.GetByIdAsync(authorId)).ReturnsAsync(author);
 
-        // Act
         var act = async () => await _postService.CreatePostAsync(dto, authorId);
 
-        // Assert
-        await act.Should().ThrowAsync<DomainException>()
-            .WithMessage("Title cannot be empty");
+        await act.Should().ThrowAsync<DomainException>().WithMessage("*Title cannot be empty*");
     }
 
     [Fact]
     public async Task CreatePostAsync_WithShortTitle_ThrowsDomainException()
     {
-        // Arrange
         var dto = new CreatePostDto("AB", "Valid content with enough characters", "valid-slug");
         var authorId = Guid.NewGuid();
         var author = new User("John Doe", "john@example.com", "hash", "Author");
 
         _userRepositoryMock.Setup(r => r.GetByIdAsync(authorId)).ReturnsAsync(author);
 
-        // Act
         var act = async () => await _postService.CreatePostAsync(dto, authorId);
 
-        // Assert
-        await act.Should().ThrowAsync<DomainException>()
-            .WithMessage("Title must be between 3 and 200 characters");
+        await act.Should().ThrowAsync<DomainException>().WithMessage("Title must be between 3 and 200 characters");
     }
 
     [Fact]
     public async Task CreatePostAsync_WithEmptyContent_ThrowsDomainException()
     {
-        // Arrange
         var dto = new CreatePostDto("Valid Title", "", "valid-slug");
         var authorId = Guid.NewGuid();
         var author = new User("John Doe", "john@example.com", "hash", "Author");
 
         _userRepositoryMock.Setup(r => r.GetByIdAsync(authorId)).ReturnsAsync(author);
 
-        // Act
         var act = async () => await _postService.CreatePostAsync(dto, authorId);
 
-        // Assert
-        await act.Should().ThrowAsync<DomainException>()
-            .WithMessage("Content cannot be empty");
+        await act.Should().ThrowAsync<DomainException>().WithMessage("*Content cannot be empty*");
     }
 
     [Fact]
     public async Task CreatePostAsync_WithShortContent_ThrowsDomainException()
     {
-        // Arrange
         var dto = new CreatePostDto("Valid Title", "Short", "valid-slug");
         var authorId = Guid.NewGuid();
         var author = new User("John Doe", "john@example.com", "hash", "Author");
 
         _userRepositoryMock.Setup(r => r.GetByIdAsync(authorId)).ReturnsAsync(author);
 
-        // Act
         var act = async () => await _postService.CreatePostAsync(dto, authorId);
 
-        // Assert
-        await act.Should().ThrowAsync<DomainException>()
-            .WithMessage("Content must have at least 10 characters");
+        await act.Should().ThrowAsync<DomainException>().WithMessage("Content must have at least 10 characters");
     }
 
     [Fact]
     public async Task CreatePostAsync_WithValidCategories_LinksCategoriesToPost()
     {
-        // Arrange
         var category1Id = Guid.NewGuid();
         var category2Id = Guid.NewGuid();
         var category1 = new Category("Tech", "tech", "Technology posts");
@@ -179,7 +151,7 @@ public class PostServiceTests
             "Test Post",
             "Test content with enough characters",
             "test-post",
-            new List<Guid> { category1Id, category2Id }
+            [category1Id, category2Id]
         );
         var authorId = Guid.NewGuid();
         var author = new User("John Doe", "john@example.com", "hash", "Author");
@@ -195,10 +167,8 @@ public class PostServiceTests
             .Callback<Post>(p => capturedPost = p)
             .ReturnsAsync((Post p) => p);
 
-        // Act
         var result = await _postService.CreatePostAsync(dto, authorId);
 
-        // Assert
         result.Categories.Should().HaveCount(2);
         result.Categories.Should().Contain(c => c.Name == "Tech");
         result.Categories.Should().Contain(c => c.Name == "Programming");
@@ -210,13 +180,12 @@ public class PostServiceTests
     [Fact]
     public async Task CreatePostAsync_WithNonExistentCategory_ThrowsException()
     {
-        // Arrange
         var categoryId = Guid.NewGuid();
         var dto = new CreatePostDto(
             "Test Post",
             "Test content with enough characters",
             "test-post",
-            new List<Guid> { categoryId }
+            [categoryId]
         );
         var authorId = Guid.NewGuid();
         var author = new User("John Doe", "john@example.com", "hash", "Author");
@@ -224,10 +193,8 @@ public class PostServiceTests
         _userRepositoryMock.Setup(r => r.GetByIdAsync(authorId)).ReturnsAsync(author);
         _categoryRepositoryMock.Setup(r => r.GetByIdAsync(categoryId)).ReturnsAsync((Category?)null);
 
-        // Act
         var act = async () => await _postService.CreatePostAsync(dto, authorId);
 
-        // Assert
         await act.Should().ThrowAsync<DomainException>()
             .WithMessage($"Category with ID {categoryId} not found");
     }

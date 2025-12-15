@@ -1,43 +1,37 @@
-using BlogAPI.Domain.Exceptions;
+using BlogAPI.Domain.Abstractions;
 using BlogAPI.Domain.Validators;
 
 namespace BlogAPI.Domain.Entities;
 
-public class Post
+public class Post : Entity
 {
     protected Post()
     {
-        Title = null!;
-        Content = null!;
-        Slug = null!;
-        Author = null!;
-        Categories = null!;
+        Categories = new List<Category>();
     }
 
     public Post(string title, string content, string slug, Guid authorId)
     {
-        Id = Guid.NewGuid();
         Title = title;
         Content = content;
         Slug = slug;
         AuthorId = authorId;
-        CreatedAt = DateTime.UtcNow;
         IsPublished = false;
         Categories = new List<Category>();
 
-        Validate();
+        Validate(this, new PostValidator());
     }
 
-    public Guid Id { get; private set; }
-    public string Title { get; private set; }
-    public string Content { get; private set; }
-    public string Slug { get; private set; }
+    public string Title { get; private set; } = null!;
+    public string Content { get; private set; } = null!;
+    public string Slug { get; private set; } = null!;
+
     public Guid AuthorId { get; private set; }
-    public User Author { get; private set; }
-    public DateTime CreatedAt { get; private set; }
-    public DateTime? UpdatedAt { get; private set; }
-    public DateTime? PublishedAt { get; private set; }
+    public User? Author { get; private set; }
+
     public bool IsPublished { get; private set; }
+    public DateTime? PublishedAt { get; private set; }
+
     public ICollection<Category> Categories { get; private set; }
 
     public void Update(string title, string content, string slug)
@@ -46,40 +40,38 @@ public class Post
         Content = content;
         Slug = slug;
         UpdatedAt = DateTime.UtcNow;
-        Validate();
+
+        Validate(this, new PostValidator());
     }
 
     public void Publish()
     {
+        if (IsPublished) return;
         IsPublished = true;
         PublishedAt = DateTime.UtcNow;
     }
 
     public void Unpublish()
     {
+        if (!IsPublished) return;
         IsPublished = false;
         PublishedAt = null;
     }
 
     public void AddCategory(Category category)
     {
-        if (!Categories.Contains(category))
+        if (Categories.All(c => c.Id != category.Id))
+        {
             Categories.Add(category);
+        }
     }
 
     public void RemoveCategory(Category category)
     {
-        Categories.Remove(category);
-    }
-
-    private void Validate()
-    {
-        var validator = new PostValidator();
-        var result = validator.Validate(this);
-
-        if (result.IsValid) return;
-
-        var errorMessage = result.Errors.FirstOrDefault()?.ErrorMessage;
-        if (errorMessage != null) throw new DomainException(errorMessage);
+        var existing = Categories.FirstOrDefault(c => c.Id == category.Id);
+        if (existing != null)
+        {
+            Categories.Remove(existing);
+        }
     }
 }

@@ -725,6 +725,22 @@
           }
         }
       },
+      "Scalar.AspNetCore/2.11.6": {
+        "type": "package",
+        "compile": {
+          "lib/net9.0/Scalar.AspNetCore.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0/Scalar.AspNetCore.dll": {
+            "related": ".xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
+      },
       "System.CodeDom/6.0.0": {
         "type": "package",
         "compile": {
@@ -2519,6 +2535,25 @@
         "postgresql.png"
       ]
     },
+    "Scalar.AspNetCore/2.11.6": {
+      "sha512": "Sq55A++4V08c6i+o80v1pUULL3AoEWv+HJcxOhbevt3t5W9YVJEZ1BdEIEHbYZA3Otb6L6G0BurJ5xBQSM2mzA==",
+      "type": "package",
+      "path": "scalar.aspnetcore/2.11.6",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "icon.png",
+        "lib/net10.0/Scalar.AspNetCore.dll",
+        "lib/net10.0/Scalar.AspNetCore.xml",
+        "lib/net8.0/Scalar.AspNetCore.dll",
+        "lib/net8.0/Scalar.AspNetCore.xml",
+        "lib/net9.0/Scalar.AspNetCore.dll",
+        "lib/net9.0/Scalar.AspNetCore.xml",
+        "scalar.aspnetcore.2.11.6.nupkg.sha512",
+        "scalar.aspnetcore.nuspec"
+      ]
+    },
     "System.CodeDom/6.0.0": {
       "sha512": "CPc6tWO1LAer3IzfZufDBRL+UZQcj5uS207NHALQzP84Vp/z6wF0Aa0YZImOQY8iStY0A2zI/e3ihKNPfUm8XA==",
       "type": "package",
@@ -2928,7 +2963,8 @@
       "BlogAPI.Application >= 1.0.0",
       "BlogAPI.Infrastructure >= 1.0.0",
       "Microsoft.AspNetCore.OpenApi >= 9.0.10",
-      "Microsoft.EntityFrameworkCore.Tools >= 9.0.0"
+      "Microsoft.EntityFrameworkCore.Tools >= 9.0.0",
+      "Scalar.AspNetCore >= 2.11.6"
     ]
   },
   "packageFolders": {
@@ -2990,6 +3026,10 @@
             "suppressParent": "All",
             "target": "Package",
             "version": "[9.0.0, )"
+          },
+          "Scalar.AspNetCore": {
+            "target": "Package",
+            "version": "[2.11.6, )"
           }
         },
         "imports": [

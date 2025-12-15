@@ -11,7 +11,8 @@
           "BlogAPI.Application": "1.0.0",
           "BlogAPI.Infrastructure": "1.0.0",
           "Microsoft.AspNetCore.OpenApi": "9.0.10",
-          "Microsoft.EntityFrameworkCore.Tools": "9.0.0"
+          "Microsoft.EntityFrameworkCore.Tools": "9.0.0",
+          "Scalar.AspNetCore": "2.11.6"
         },
         "runtime": {
           "BlogAPI.API.dll": {}
@@ -492,6 +493,14 @@
           }
         }
       },
+      "Scalar.AspNetCore/2.11.6": {
+        "runtime": {
+          "lib/net9.0/Scalar.AspNetCore.dll": {
+            "assemblyVersion": "2.11.6.0",
+            "fileVersion": "2.11.6.0"
+          }
+        }
+      },
       "System.CodeDom/6.0.0": {
         "runtime": {
           "lib/net6.0/System.CodeDom.dll": {
@@ -827,6 +836,13 @@
       "sha512": "sha512-cYdOGplIvr9KgsG8nJ8xnzBTImeircbgetlzS1OmepS5dAQW6PuGpVrLOKBNEwEvGYZPsV8037X5vZ/Dmpwz7Q==",
       "path": "npgsql.entityframeworkcore.postgresql/9.0.2",
       "hashPath": "npgsql.entityframeworkcore.postgresql.9.0.2.nupkg.sha512"
+    },
+    "Scalar.AspNetCore/2.11.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Sq55A++4V08c6i+o80v1pUULL3AoEWv+HJcxOhbevt3t5W9YVJEZ1BdEIEHbYZA3Otb6L6G0BurJ5xBQSM2mzA==",
+      "path": "scalar.aspnetcore/2.11.6",
+      "hashPath": "scalar.aspnetcore.2.11.6.nupkg.sha512"
     },
     "System.CodeDom/6.0.0": {
       "type": "package",

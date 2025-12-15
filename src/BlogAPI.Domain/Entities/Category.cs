@@ -1,34 +1,28 @@
-using BlogAPI.Domain.Exceptions;
+using BlogAPI.Domain.Abstractions;
 using BlogAPI.Domain.Validators;
 
 namespace BlogAPI.Domain.Entities;
 
-public class Category
+public class Category : Entity
 {
     protected Category()
     {
-        Name = null!;
-        Slug = null!;
-        Posts = null!;
+        Posts = new List<Post>();
     }
 
     public Category(string name, string slug, string? description = null)
     {
-        Id = Guid.NewGuid();
         Name = name;
         Slug = slug;
         Description = description;
-        CreatedAt = DateTime.UtcNow;
         Posts = new List<Post>();
 
-        Validate();
+        Validate(this, new CategoryValidator());
     }
 
-    public Guid Id { get; private set; }
-    public string Name { get; private set; }
-    public string Slug { get; private set; }
+    public string Name { get; private set; } = null!;
+    public string Slug { get; private set; } = null!;
     public string? Description { get; private set; }
-    public DateTime CreatedAt { get; private set; }
     public ICollection<Post> Posts { get; private set; }
 
     public void Update(string name, string slug, string? description)
@@ -36,17 +30,8 @@ public class Category
         Name = name;
         Slug = slug;
         Description = description;
-        Validate();
-    }
+        UpdatedAt = DateTime.UtcNow;
 
-    private void Validate()
-    {
-        var validator = new CategoryValidator();
-        var result = validator.Validate(this);
-
-        if (result.IsValid) return;
-
-        var errorMessage = result.Errors.FirstOrDefault()?.ErrorMessage;
-        if (errorMessage != null) throw new DomainException(errorMessage);
+        Validate(this, new CategoryValidator());
     }
 }

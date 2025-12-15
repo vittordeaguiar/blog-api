@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "6+Wfw/brTpw=",
+  "success": true,
+  "projectFilePath": "/Users/vittordeaguiar/www/blog-api/src/BlogAPI.API/BlogAPI.API.csproj",
+  "expectedPackageFiles": [
+    "/Users/vittordeaguiar/.nuget/packages/microsoft.aspnetcore.openapi/9.0.10/microsoft.aspnetcore.openapi.9.0.10.nupkg.sha512",
+    "/Users/vittordeaguiar/.nuget/packages/microsoft.openapi/1.6.17/microsoft.openapi.1.6.17.nupkg.sha512"
+  ],
+  "logs": []
+}

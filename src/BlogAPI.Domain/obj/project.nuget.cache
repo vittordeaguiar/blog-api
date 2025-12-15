@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "Dsnk0nQFSf8=",
+  "dgSpecHash": "AkA1PrFFnP0=",
   "success": true,
   "projectFilePath": "/Users/vittordeaguiar/www/blog-api/src/BlogAPI.Domain/BlogAPI.Domain.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "/Users/vittordeaguiar/.nuget/packages/fluentvalidation/12.1.1/fluentvalidation.12.1.1.nupkg.sha512"
+  ],
   "logs": []
 }

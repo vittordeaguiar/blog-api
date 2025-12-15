@@ -10,3 +10,4 @@
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.Domain/obj/Debug/net9.0/BlogAPI.Domain.pdb
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.Domain/obj/Debug/net9.0/ref/BlogAPI.Domain.dll
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.Domain/obj/Debug/net9.0/BlogAPI.Domain.sourcelink.json
+/Users/vittordeaguiar/www/blog-api/src/BlogAPI.Domain/obj/Debug/net9.0/BlogAPI.Domain.csproj.AssemblyReference.cache

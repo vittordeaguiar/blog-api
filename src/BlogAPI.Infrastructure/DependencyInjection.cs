@@ -1,4 +1,6 @@
+using BlogAPI.Domain.Interfaces;
 using BlogAPI.Infrastructure.Data;
+using BlogAPI.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,11 +29,13 @@ public static class DependencyInjection
                     npgsqlOptions.MigrationsAssembly(typeof(BlogDbContext).Assembly.FullName);
                 });
 
-            #if DEBUG
+#if DEBUG
             options.EnableSensitiveDataLogging();
             options.EnableDetailedErrors();
-            #endif
+#endif
         });
+
+        services.AddSingleton<IPasswordService, BCryptPasswordService>();
 
         return services;
     }

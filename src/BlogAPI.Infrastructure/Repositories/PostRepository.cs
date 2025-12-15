@@ -7,11 +7,17 @@ namespace BlogAPI.Infrastructure.Repositories;
 
 public class PostRepository(BlogDbContext context) : Repository<Post>(context), IPostRepository
 {
-    private readonly BlogDbContext _context = context;
+    public override async Task<Post?> GetByIdAsync(Guid id)
+    {
+        return await Query
+            .Include(p => p.Author)
+            .Include(p => p.Categories)
+            .FirstOrDefaultAsync(p => p.Id == id);
+    }
 
     public async Task<Post?> GetBySlugAsync(string slug)
     {
-        return await _context.Posts
+        return await Query
             .Include(p => p.Author)
             .Include(p => p.Categories)
             .AsNoTracking()
@@ -20,7 +26,7 @@ public class PostRepository(BlogDbContext context) : Repository<Post>(context), 
 
     public async Task<IEnumerable<Post>> GetByAuthorAsync(Guid authorId)
     {
-        return await _context.Posts
+        return await Query
             .Include(p => p.Categories)
             .AsNoTracking()
             .Where(p => p.AuthorId == authorId)
@@ -30,7 +36,7 @@ public class PostRepository(BlogDbContext context) : Repository<Post>(context), 
 
     public async Task<IEnumerable<Post>> GetPublishedAsync()
     {
-        return await _context.Posts
+        return await Query
             .Include(p => p.Author)
             .Include(p => p.Categories)
             .AsNoTracking()
@@ -41,7 +47,7 @@ public class PostRepository(BlogDbContext context) : Repository<Post>(context), 
 
     public async Task<IEnumerable<Post>> GetByCategoryAsync(Guid categoryId)
     {
-        return await _context.Posts
+        return await Query
             .Include(p => p.Author)
             .Include(p => p.Categories)
             .AsNoTracking()
@@ -52,7 +58,7 @@ public class PostRepository(BlogDbContext context) : Repository<Post>(context), 
 
     public async Task<(IEnumerable<Post> Posts, int TotalCount)> GetPagedAsync(int page, int pageSize)
     {
-        var query = _context.Posts
+        var query = Query
             .Include(p => p.Author)
             .Include(p => p.Categories)
             .AsNoTracking()

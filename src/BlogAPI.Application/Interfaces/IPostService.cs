@@ -3,7 +3,7 @@ using BlogAPI.Application.DTOs;
 
 namespace BlogAPI.Application.Interfaces;
 
-public interface IPostService
+public interface IPostService   
 {
     Task<PostResponseDto> CreatePostAsync(CreatePostDto dto, Guid authorId);
     Task<PagedResult<PostResponseDto>> GetPostsAsync(int page, int pageSize);

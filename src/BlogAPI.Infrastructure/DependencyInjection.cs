@@ -51,6 +51,7 @@ public static class DependencyInjection
 
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IPostService, PostService>();
+        services.AddScoped<ICategoryService, CategoryService>();
 
         return services;
     }

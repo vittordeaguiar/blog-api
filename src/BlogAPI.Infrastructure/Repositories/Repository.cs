@@ -6,27 +6,32 @@ namespace BlogAPI.Infrastructure.Repositories;
 
 public class Repository<T>(BlogDbContext context) : IRepository<T> where T : class
 {
-    public async Task<T?> GetByIdAsync(Guid id)
+    private readonly BlogDbContext _context = context;
+    private readonly DbSet<T> _dbSet = context.Set<T>();
+
+    protected IQueryable<T> Query => _dbSet;
+
+    public virtual async Task<T?> GetByIdAsync(Guid id)
     {
-        return await context.Set<T>().FindAsync(id);
+        return await _dbSet.FindAsync(id);
     }
 
-    public async Task<IEnumerable<T>> GetAllAsync()
+    public virtual async Task<IEnumerable<T>> GetAllAsync()
     {
-        return await context.Set<T>().AsNoTracking().ToListAsync();
+        return await _dbSet.AsNoTracking().ToListAsync();
     }
 
     public async Task<T> AddAsync(T entity)
     {
-        await context.Set<T>().AddAsync(entity);
-        await context.SaveChangesAsync();
+        await _dbSet.AddAsync(entity);
+        await _context.SaveChangesAsync();
         return entity;
     }
 
     public async Task UpdateAsync(T entity)
     {
-        context.Set<T>().Update(entity);
-        await context.SaveChangesAsync();
+        _dbSet.Update(entity);
+        await _context.SaveChangesAsync();
     }
 
     public async Task DeleteAsync(Guid id)
@@ -34,14 +39,13 @@ public class Repository<T>(BlogDbContext context) : IRepository<T> where T : cla
         var entity = await GetByIdAsync(id);
         if (entity != null)
         {
-            context.Set<T>().Remove(entity);
-            await context.SaveChangesAsync();
+            _dbSet.Remove(entity);
+            await _context.SaveChangesAsync();
         }
     }
 
     public async Task<bool> ExistsAsync(Guid id)
     {
-        var entity = await context.Set<T>().FindAsync(id);
-        return entity != null;
+        return await _dbSet.AnyAsync(e => EF.Property<Guid>(e, "Id") == id);
     }
 }

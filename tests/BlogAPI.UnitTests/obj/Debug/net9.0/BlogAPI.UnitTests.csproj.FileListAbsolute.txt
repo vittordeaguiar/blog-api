@@ -131,3 +131,5 @@
 /Users/vittordeaguiar/www/blog-api/tests/BlogAPI.UnitTests/obj/Debug/net9.0/BlogAPI.UnitTests.pdb
 /Users/vittordeaguiar/www/blog-api/tests/BlogAPI.UnitTests/obj/Debug/net9.0/BlogAPI.UnitTests.genruntimeconfig.cache
 /Users/vittordeaguiar/www/blog-api/tests/BlogAPI.UnitTests/obj/Debug/net9.0/ref/BlogAPI.UnitTests.dll
+/Users/vittordeaguiar/www/blog-api/tests/BlogAPI.UnitTests/bin/Debug/net9.0/AutoMapper.dll
+/Users/vittordeaguiar/www/blog-api/tests/BlogAPI.UnitTests/bin/Debug/net9.0/AutoMapper.Extensions.Microsoft.DependencyInjection.dll

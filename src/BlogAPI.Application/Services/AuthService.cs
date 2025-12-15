@@ -27,10 +27,7 @@ public class AuthService(
     public async Task RegisterAsync(RegisterUserDto dto)
     {
         var existingUser = await userRepository.GetByEmailAsync(dto.Email);
-        if (existingUser != null)
-        {
-            throw new DomainException("Email already in use");
-        }
+        if (existingUser != null) throw new DomainException("Email already in use");
 
         var passwordHash = passwordService.Hash(dto.Password);
 

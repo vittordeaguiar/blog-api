@@ -1,4 +1,5 @@
 using BlogAPI.Application.Interfaces;
+using BlogAPI.Application.Mappings;
 using BlogAPI.Application.Services;
 using BlogAPI.Domain.Interfaces;
 using BlogAPI.Infrastructure.Data;
@@ -38,6 +39,8 @@ public static class DependencyInjection
 #endif
         });
 
+        services.AddAutoMapper(typeof(PostMappingProfile).Assembly);
+
         services.AddSingleton<IPasswordService, BCryptPasswordService>();
         services.AddSingleton<ITokenService, TokenService>();
 
@@ -47,6 +50,7 @@ public static class DependencyInjection
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IPostService, PostService>();
 
         return services;
     }

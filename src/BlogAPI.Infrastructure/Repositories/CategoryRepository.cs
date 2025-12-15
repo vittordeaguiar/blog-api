@@ -7,9 +7,11 @@ namespace BlogAPI.Infrastructure.Repositories;
 
 public class CategoryRepository(BlogDbContext context) : Repository<Category>(context), ICategoryRepository
 {
+    private readonly BlogDbContext _context = context;
+
     public async Task<Category?> GetBySlugAsync(string slug)
     {
-        return await context.Categories
+        return await _context.Categories
             .Include(c => c.Posts)
             .AsNoTracking()
             .FirstOrDefaultAsync(c => c.Slug == slug);
@@ -17,7 +19,7 @@ public class CategoryRepository(BlogDbContext context) : Repository<Category>(co
 
     public async Task<Category?> GetByNameAsync(string name)
     {
-        return await context.Categories
+        return await _context.Categories
             .AsNoTracking()
             .FirstOrDefaultAsync(c => c.Name == name);
     }

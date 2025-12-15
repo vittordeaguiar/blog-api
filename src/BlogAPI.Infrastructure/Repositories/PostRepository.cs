@@ -7,9 +7,11 @@ namespace BlogAPI.Infrastructure.Repositories;
 
 public class PostRepository(BlogDbContext context) : Repository<Post>(context), IPostRepository
 {
+    private readonly BlogDbContext _context = context;
+
     public async Task<Post?> GetBySlugAsync(string slug)
     {
-        return await context.Posts
+        return await _context.Posts
             .Include(p => p.Author)
             .Include(p => p.Categories)
             .AsNoTracking()
@@ -18,7 +20,7 @@ public class PostRepository(BlogDbContext context) : Repository<Post>(context), 
 
     public async Task<IEnumerable<Post>> GetByAuthorAsync(Guid authorId)
     {
-        return await context.Posts
+        return await _context.Posts
             .Include(p => p.Categories)
             .AsNoTracking()
             .Where(p => p.AuthorId == authorId)
@@ -28,7 +30,7 @@ public class PostRepository(BlogDbContext context) : Repository<Post>(context), 
 
     public async Task<IEnumerable<Post>> GetPublishedAsync()
     {
-        return await context.Posts
+        return await _context.Posts
             .Include(p => p.Author)
             .Include(p => p.Categories)
             .AsNoTracking()
@@ -39,12 +41,30 @@ public class PostRepository(BlogDbContext context) : Repository<Post>(context), 
 
     public async Task<IEnumerable<Post>> GetByCategoryAsync(Guid categoryId)
     {
-        return await context.Posts
+        return await _context.Posts
             .Include(p => p.Author)
             .Include(p => p.Categories)
             .AsNoTracking()
             .Where(p => p.Categories.Any(c => c.Id == categoryId))
             .OrderByDescending(p => p.CreatedAt)
             .ToListAsync();
+    }
+
+    public async Task<(IEnumerable<Post> Posts, int TotalCount)> GetPagedAsync(int page, int pageSize)
+    {
+        var query = _context.Posts
+            .Include(p => p.Author)
+            .Include(p => p.Categories)
+            .AsNoTracking()
+            .OrderByDescending(p => p.CreatedAt);
+
+        var totalCount = await query.CountAsync();
+
+        var posts = await query
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return (posts, totalCount);
     }
 }

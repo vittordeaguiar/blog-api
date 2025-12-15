@@ -1,6 +1,6 @@
 # 🗺️ Roadmap - Blog API
 
-> Última atualização: 2025-12-15 16:06:05
+> Última atualização: 2025-12-15 17:33:00
 > Gerado automaticamente a partir do [GitHub Project](vittordeaguiar/blog-api/projects) e [Issues](vittordeaguiar/blog-api/issues)
 
 ---
@@ -9,9 +9,9 @@
 
 | Status | Quantidade |
 |--------|------------|
-| ✅ Done | 5 |
+| ✅ Done | 6 |
 | 🔄 In Progress | 1 |
-| 🚀 Ready | 2 |
+| 🚀 Ready | 1 |
 | 📋 Backlog | 2 |
 | ⚪ Sem Status | 0 |
 | **Total** | **10** |
@@ -22,7 +22,7 @@
 
 Issues atualmente sendo desenvolvidas:
 
-- [#6](https://github.com/vittordeaguiar/blog-api/issues/6) - CRUD de Categorias e Posts (Entidades & Mapas)
+- [#7](https://github.com/vittordeaguiar/blog-api/issues/7) - Serviços e Regras de Negócio de Posts
 
 ---
 
@@ -30,7 +30,6 @@ Issues atualmente sendo desenvolvidas:
 
 Issues prontas para serem iniciadas:
 
-- [#7](https://github.com/vittordeaguiar/blog-api/issues/7) - Serviços e Regras de Negócio de Posts
 - [#8](https://github.com/vittordeaguiar/blog-api/issues/8) - API Controllers para Blog
 
 ---
@@ -53,6 +52,7 @@ Issues concluídas:
 - [#4](https://github.com/vittordeaguiar/blog-api/issues/4) - Implementar Domínio de Usuário e Criptografia
 - [#1](https://github.com/vittordeaguiar/blog-api/issues/1) - Inicializar Estrutura da Solução (Clean Architecture)
 - [#5](https://github.com/vittordeaguiar/blog-api/issues/5) - Implementar Autenticação JWT
+- [#6](https://github.com/vittordeaguiar/blog-api/issues/6) - CRUD de Categorias e Posts (Entidades & Mapas)
 
 ---
 

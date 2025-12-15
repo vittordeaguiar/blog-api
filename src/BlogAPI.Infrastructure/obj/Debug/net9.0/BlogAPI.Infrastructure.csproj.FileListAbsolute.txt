@@ -15,3 +15,6 @@
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.Infrastructure/obj/Debug/net9.0/refint/BlogAPI.Infrastructure.dll
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.Infrastructure/obj/Debug/net9.0/BlogAPI.Infrastructure.pdb
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.Infrastructure/obj/Debug/net9.0/ref/BlogAPI.Infrastructure.dll
+/Users/vittordeaguiar/www/blog-api/src/BlogAPI.Infrastructure/bin/Debug/net9.0/BlogAPI.Infrastructure.runtimeconfig.json
+/Users/vittordeaguiar/www/blog-api/src/BlogAPI.Infrastructure/obj/Debug/net9.0/BlogAPI.Infrastructure.sourcelink.json
+/Users/vittordeaguiar/www/blog-api/src/BlogAPI.Infrastructure/obj/Debug/net9.0/BlogAPI.Infrastructure.genruntimeconfig.cache

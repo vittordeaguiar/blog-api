@@ -1,5 +1,8 @@
+using BlogAPI.Application.Interfaces;
+using BlogAPI.Application.Services;
 using BlogAPI.Domain.Interfaces;
 using BlogAPI.Infrastructure.Data;
+using BlogAPI.Infrastructure.Repositories;
 using BlogAPI.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -36,6 +39,10 @@ public static class DependencyInjection
         });
 
         services.AddSingleton<IPasswordService, BCryptPasswordService>();
+        services.AddSingleton<ITokenService, TokenService>();
+
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IAuthService, AuthService>();
 
         return services;
     }

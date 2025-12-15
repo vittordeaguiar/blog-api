@@ -1,13 +1,11 @@
+using BlogAPI.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace BlogAPI.Infrastructure.Data;
 
-public class BlogDbContext : DbContext
+public class BlogDbContext(DbContextOptions<BlogDbContext> options) : DbContext(options)
 {
-    public BlogDbContext(DbContextOptions<BlogDbContext> options)
-        : base(options)
-    {
-    }
+    public DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -20,9 +18,9 @@ public class BlogDbContext : DbContext
     {
         base.OnConfiguring(optionsBuilder);
 
-        #if DEBUG
+#if DEBUG
         optionsBuilder.EnableSensitiveDataLogging();
         optionsBuilder.EnableDetailedErrors();
-        #endif
+#endif
     }
 }

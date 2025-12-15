@@ -1,4 +1,5 @@
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.Infrastructure/bin/Debug/net9.0/BlogAPI.Infrastructure.deps.json
+/Users/vittordeaguiar/www/blog-api/src/BlogAPI.Infrastructure/bin/Debug/net9.0/BlogAPI.Infrastructure.runtimeconfig.json
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.Infrastructure/bin/Debug/net9.0/BlogAPI.Infrastructure.dll
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.Infrastructure/bin/Debug/net9.0/BlogAPI.Infrastructure.pdb
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.Infrastructure/bin/Debug/net9.0/BlogAPI.Application.dll
@@ -10,11 +11,10 @@
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.Infrastructure/obj/Debug/net9.0/BlogAPI.Infrastructure.AssemblyInfoInputs.cache
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.Infrastructure/obj/Debug/net9.0/BlogAPI.Infrastructure.AssemblyInfo.cs
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.Infrastructure/obj/Debug/net9.0/BlogAPI.Infrastructure.csproj.CoreCompileInputs.cache
+/Users/vittordeaguiar/www/blog-api/src/BlogAPI.Infrastructure/obj/Debug/net9.0/BlogAPI.Infrastructure.sourcelink.json
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.Infrastructure/obj/Debug/net9.0/BlogAPI..8FBF4773.Up2Date
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.Infrastructure/obj/Debug/net9.0/BlogAPI.Infrastructure.dll
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.Infrastructure/obj/Debug/net9.0/refint/BlogAPI.Infrastructure.dll
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.Infrastructure/obj/Debug/net9.0/BlogAPI.Infrastructure.pdb
-/Users/vittordeaguiar/www/blog-api/src/BlogAPI.Infrastructure/obj/Debug/net9.0/ref/BlogAPI.Infrastructure.dll
-/Users/vittordeaguiar/www/blog-api/src/BlogAPI.Infrastructure/bin/Debug/net9.0/BlogAPI.Infrastructure.runtimeconfig.json
-/Users/vittordeaguiar/www/blog-api/src/BlogAPI.Infrastructure/obj/Debug/net9.0/BlogAPI.Infrastructure.sourcelink.json
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.Infrastructure/obj/Debug/net9.0/BlogAPI.Infrastructure.genruntimeconfig.cache
+/Users/vittordeaguiar/www/blog-api/src/BlogAPI.Infrastructure/obj/Debug/net9.0/ref/BlogAPI.Infrastructure.dll

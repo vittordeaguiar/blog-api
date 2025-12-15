@@ -1,13 +1,13 @@
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.Domain/bin/Debug/net9.0/BlogAPI.Domain.deps.json
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.Domain/bin/Debug/net9.0/BlogAPI.Domain.dll
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.Domain/bin/Debug/net9.0/BlogAPI.Domain.pdb
+/Users/vittordeaguiar/www/blog-api/src/BlogAPI.Domain/obj/Debug/net9.0/BlogAPI.Domain.csproj.AssemblyReference.cache
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.Domain/obj/Debug/net9.0/BlogAPI.Domain.GeneratedMSBuildEditorConfig.editorconfig
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.Domain/obj/Debug/net9.0/BlogAPI.Domain.AssemblyInfoInputs.cache
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.Domain/obj/Debug/net9.0/BlogAPI.Domain.AssemblyInfo.cs
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.Domain/obj/Debug/net9.0/BlogAPI.Domain.csproj.CoreCompileInputs.cache
+/Users/vittordeaguiar/www/blog-api/src/BlogAPI.Domain/obj/Debug/net9.0/BlogAPI.Domain.sourcelink.json
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.Domain/obj/Debug/net9.0/BlogAPI.Domain.dll
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.Domain/obj/Debug/net9.0/refint/BlogAPI.Domain.dll
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.Domain/obj/Debug/net9.0/BlogAPI.Domain.pdb
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.Domain/obj/Debug/net9.0/ref/BlogAPI.Domain.dll
-/Users/vittordeaguiar/www/blog-api/src/BlogAPI.Domain/obj/Debug/net9.0/BlogAPI.Domain.sourcelink.json
-/Users/vittordeaguiar/www/blog-api/src/BlogAPI.Domain/obj/Debug/net9.0/BlogAPI.Domain.csproj.AssemblyReference.cache

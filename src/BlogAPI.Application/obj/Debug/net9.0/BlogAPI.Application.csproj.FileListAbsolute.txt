@@ -8,9 +8,9 @@
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.Application/obj/Debug/net9.0/BlogAPI.Application.AssemblyInfoInputs.cache
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.Application/obj/Debug/net9.0/BlogAPI.Application.AssemblyInfo.cs
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.Application/obj/Debug/net9.0/BlogAPI.Application.csproj.CoreCompileInputs.cache
+/Users/vittordeaguiar/www/blog-api/src/BlogAPI.Application/obj/Debug/net9.0/BlogAPI.Application.sourcelink.json
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.Application/obj/Debug/net9.0/BlogAPI..039527A1.Up2Date
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.Application/obj/Debug/net9.0/BlogAPI.Application.dll
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.Application/obj/Debug/net9.0/refint/BlogAPI.Application.dll
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.Application/obj/Debug/net9.0/BlogAPI.Application.pdb
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.Application/obj/Debug/net9.0/ref/BlogAPI.Application.dll
-/Users/vittordeaguiar/www/blog-api/src/BlogAPI.Application/obj/Debug/net9.0/BlogAPI.Application.sourcelink.json

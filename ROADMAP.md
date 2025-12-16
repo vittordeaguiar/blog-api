@@ -1,6 +1,6 @@
 # 🗺️ Roadmap - Blog API
 
-> Última atualização: 2025-12-15 20:56:09
+> Última atualização: 2025-12-15 23:44:40
 > Gerado automaticamente a partir do [GitHub Project](vittordeaguiar/blog-api/projects) e [Issues](vittordeaguiar/blog-api/issues)
 
 ---
@@ -9,9 +9,9 @@
 
 | Status | Quantidade |
 |--------|------------|
-| ✅ Done | 8 |
+| ✅ Done | 9 |
 | 🔄 In Progress | 1 |
-| 🚀 Ready | 1 |
+| 🚀 Ready | 0 |
 | 📋 Backlog | 0 |
 | ⚪ Sem Status | 0 |
 | **Total** | **10** |
@@ -22,7 +22,7 @@
 
 Issues atualmente sendo desenvolvidas:
 
-- [#9](https://github.com/vittordeaguiar/blog-api/issues/9) - Testes Unitários (Core Domain)
+- [#10](https://github.com/vittordeaguiar/blog-api/issues/10) - Dockerização do Ambiente
 
 ---
 
@@ -30,7 +30,8 @@ Issues atualmente sendo desenvolvidas:
 
 Issues prontas para serem iniciadas:
 
-- [#10](https://github.com/vittordeaguiar/blog-api/issues/10) - Dockerização do Ambiente
+
+_Nenhuma issue nesta categoria_
 
 ---
 
@@ -47,6 +48,7 @@ _Nenhuma issue nesta categoria_
 
 Issues concluídas:
 
+- [#9](https://github.com/vittordeaguiar/blog-api/issues/9) - Testes Unitários (Core Domain)
 - [#8](https://github.com/vittordeaguiar/blog-api/issues/8) - API Controllers para Blog
 - [#2](https://github.com/vittordeaguiar/blog-api/issues/2) - Configurar Entity Framework Core e Contexto
 - [#3](https://github.com/vittordeaguiar/blog-api/issues/3) - Implementar Middleware de Tratamento de Erros e Swagger

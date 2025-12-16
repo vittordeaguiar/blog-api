@@ -50,6 +50,35 @@ public class PostsController(IPostService postService) : ControllerBase
         return CreatedAtAction(nameof(GetBySlug), new { slug = result.Slug }, result);
     }
 
+    [HttpPut("{id:guid}")]
+    [Authorize]
+    public async Task<IActionResult> Update(Guid id, [FromBody] UpdatePostDto dto)
+    {
+        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (!Guid.TryParse(userIdClaim, out var currentUserId))
+        {
+            return Unauthorized();
+        }
+
+        var userRole = User.FindFirst(ClaimTypes.Role)?.Value;
+
+        try
+        {
+            var post = await postService.GetPostByIdAsync(id);
+            var isAdmin = userRole == "Admin";
+            var isOwner = post.AuthorId == currentUserId;
+
+            if (!isAdmin && !isOwner) return Forbid();
+
+            await postService.UpdatePostAsync(id, dto);
+            return NoContent();
+        }
+        catch (DomainException)
+        {
+            return NotFound();
+        }
+    }
+
     [HttpDelete("{id:guid}")]
     [Authorize]
     public async Task<IActionResult> Delete(Guid id)

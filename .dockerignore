@@ -1,0 +1,51 @@
+# Build outputs
+**/bin/
+**/obj/
+
+# IDE files
+.idea/
+.vs/
+.vscode/
+*.user
+*.suo
+*.sln.DotSettings.user
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+.gitattributes
+.github/
+
+# Docker files
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# Documentation
+*.md
+
+# Test results
+**/TestResults/
+
+# Development database
+*.db
+*.db-shm
+*.db-wal
+
+# Environment variables
+.env
+.env.local
+
+# NuGet packages
+*.nupkg
+**/packages/
+
+# Scripts
+scripts/
+
+# Claude AI files
+.claude/

@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: blogapi-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: blogapi_dev
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - blogapi-network
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: blogapi-api
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=blogapi_dev;Username=postgres;Password=postgres;Include Error Detail=true
+      - JwtSettings__SecretKey=28bd9e5dd279d321463cd85262ceedf4
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - blogapi-network
+    restart: unless-stopped
+
+networks:
+  blogapi-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local

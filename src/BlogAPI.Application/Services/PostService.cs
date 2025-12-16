@@ -18,8 +18,7 @@ public class PostService(
     public async Task<PostResponseDto> CreatePostAsync(CreatePostDto dto, Guid authorId)
     {
         var author = await userRepository.GetByIdAsync(authorId);
-        if (author is null)
-            throw new DomainException("Author not found");
+        if (author is null) throw new DomainException("Author not found");
 
         var post = new Post(dto.Title, dto.Content, dto.Slug, authorId);
 
@@ -30,8 +29,7 @@ public class PostService(
             foreach (var categoryId in dto.CategoryIds)
             {
                 var category = await categoryRepository.GetByIdAsync(categoryId);
-                if (category is null)
-                    throw new DomainException($"Category with ID {categoryId} not found");
+                if (category is null) throw new DomainException($"Category with ID {categoryId} not found");
 
                 post.AddCategory(category);
                 categories.Add(category);
@@ -60,9 +58,7 @@ public class PostService(
     public async Task<PagedResult<PostResponseDto>> GetPostsAsync(int page, int pageSize)
     {
         if (page <= 0) throw new ArgumentException("Page must be greater than 0", nameof(page));
-
         if (pageSize <= 0) throw new ArgumentException("PageSize must be greater than 0", nameof(pageSize));
-
         if (pageSize > MaxPageSize) throw new ArgumentException($"PageSize cannot exceed {MaxPageSize}", nameof(pageSize));
 
         var (posts, totalCount) = await postRepository.GetPagedAsync(page, pageSize);
@@ -74,24 +70,19 @@ public class PostService(
     public async Task<PostResponseDto> GetPostByIdAsync(Guid id)
     {
         var post = await postRepository.GetByIdAsync(id);
-        if (post is null) throw new DomainException($"Post with ID {id} not found");
-
-        return mapper.Map<PostResponseDto>(post);
+        return post is null ? throw new DomainException($"Post with ID {id} not found") : mapper.Map<PostResponseDto>(post);
     }
 
     public async Task<PostResponseDto> GetPostBySlugAsync(string slug)
     {
         var post = await postRepository.GetBySlugAsync(slug);
-        if (post is null) throw new DomainException($"Post with slug {slug} not found");
-
-        return mapper.Map<PostResponseDto>(post);
+        return post is null ? throw new DomainException($"Post with slug {slug} not found") : mapper.Map<PostResponseDto>(post);
     }
 
     public async Task<PostResponseDto> UpdatePostAsync(Guid id, UpdatePostDto dto)
     {
         var post = await postRepository.GetByIdAsync(id);
-        if (post is null)
-            throw new DomainException($"Post with ID {id} not found");
+        if (post is null) throw new DomainException($"Post with ID {id} not found");
 
         post.Update(dto.Title, dto.Content, dto.Slug);
 

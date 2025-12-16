@@ -1,8 +1,11 @@
+using System.Security.Claims;
 using System.Text;
+using System.Threading.RateLimiting;
 using BlogAPI.API.Configuration;
 using BlogAPI.Infrastructure;
 using BlogAPI.Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -11,6 +14,32 @@ using Scalar.AspNetCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+
+if (builder.Environment.IsDevelopment())
+{
+    var corsSettings = builder.Configuration
+        .GetSection(CorsSettings.SectionName)
+        .Get<CorsSettings>();
+
+    if (corsSettings != null && corsSettings.AllowedOrigins.Length > 0)
+    {
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy(corsSettings.PolicyName, policy =>
+            {
+                policy.WithOrigins(corsSettings.AllowedOrigins)
+                      .WithMethods(corsSettings.AllowedMethods)
+                      .WithHeaders(corsSettings.AllowedHeaders)
+                      .SetPreflightMaxAge(TimeSpan.FromSeconds(corsSettings.MaxAge));
+
+                if (corsSettings.AllowCredentials)
+                {
+                    policy.AllowCredentials();
+                }
+            });
+        });
+    }
+}
 
 builder.Services.AddOpenApi(options =>
 {
@@ -69,6 +98,92 @@ builder.Services.AddAuthentication(options =>
     });
 
 builder.Services.AddAuthorization();
+
+var rateLimitSettings = builder.Configuration
+    .GetSection(RateLimitSettings.SectionName)
+    .Get<RateLimitSettings>() ?? new RateLimitSettings();
+
+if (rateLimitSettings.Enabled)
+{
+    builder.Services.AddRateLimiter(options =>
+    {
+        options.RejectionStatusCode = rateLimitSettings.StatusCode;
+
+        if (rateLimitSettings.Global.Enabled)
+        {
+            options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
+            {
+                return RateLimitPartition.GetFixedWindowLimiter(
+                    partitionKey: "global",
+                    factory: _ => new FixedWindowRateLimiterOptions
+                    {
+                        PermitLimit = rateLimitSettings.Global.PermitLimit,
+                        Window = TimeSpan.FromSeconds(rateLimitSettings.Global.WindowInSeconds),
+                        QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                        QueueLimit = rateLimitSettings.QueueRequests ? 1 : 0
+                    });
+            });
+        }
+
+        options.AddPolicy("api-limit", context =>
+        {
+            if (context.User.Identity?.IsAuthenticated == true)
+            {
+                var userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                    ?? "anonymous";
+
+                return RateLimitPartition.GetFixedWindowLimiter(
+                    partitionKey: $"user-{userId}",
+                    factory: _ => new FixedWindowRateLimiterOptions
+                    {
+                        PermitLimit = rateLimitSettings.UserLimit.PermitLimit,
+                        Window = TimeSpan.FromSeconds(rateLimitSettings.UserLimit.WindowInSeconds),
+                        QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                        QueueLimit = rateLimitSettings.QueueRequests ? 1 : 0
+                    });
+            }
+            else
+            {
+                var ipAddress = context.Connection.RemoteIpAddress?.ToString()
+                    ?? context.Request.Headers["X-Forwarded-For"].FirstOrDefault()
+                    ?? "unknown";
+
+                return RateLimitPartition.GetFixedWindowLimiter(
+                    partitionKey: $"ip-{ipAddress}",
+                    factory: _ => new FixedWindowRateLimiterOptions
+                    {
+                        PermitLimit = rateLimitSettings.IpLimit.PermitLimit,
+                        Window = TimeSpan.FromSeconds(rateLimitSettings.IpLimit.WindowInSeconds),
+                        QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                        QueueLimit = rateLimitSettings.QueueRequests ? 1 : 0
+                    });
+            }
+        });
+
+        options.OnRejected = async (context, cancellationToken) =>
+        {
+            context.HttpContext.Response.StatusCode = rateLimitSettings.StatusCode;
+
+            if (context.Lease.TryGetMetadata(MetadataName.RetryAfter, out var retryAfter))
+            {
+                context.HttpContext.Response.Headers.RetryAfter =
+                    retryAfter.TotalSeconds.ToString();
+            }
+
+            var problemDetails = new
+            {
+                type = "https://tools.ietf.org/html/rfc6585#section-4",
+                title = "Too Many Requests",
+                status = rateLimitSettings.StatusCode,
+                detail = "Rate limit exceeded. Please try again later.",
+                instance = context.HttpContext.Request.Path.Value
+            };
+
+            await context.HttpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
+        };
+    });
+}
+
 builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
@@ -101,13 +216,33 @@ app.UseExceptionHandler();
 
 if (app.Environment.IsDevelopment())
 {
+    var corsSettings = app.Configuration
+        .GetSection(CorsSettings.SectionName)
+        .Get<CorsSettings>();
+
+    if (corsSettings != null && !string.IsNullOrEmpty(corsSettings.PolicyName))
+    {
+        app.UseCors(corsSettings.PolicyName);
+    }
+}
+
+if (app.Environment.IsDevelopment())
+{
     app.MapOpenApi();
     app.MapScalarApiReference(options => { options.AddPreferredSecuritySchemes("Bearer"); });
 }
 
 app.UseHttpsRedirection();
+
+if (rateLimitSettings.Enabled)
+{
+    app.UseRateLimiter();
+}
+
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapControllers();
+
+app.MapControllers()
+   .RequireRateLimiting("api-limit");
 
 app.Run();

@@ -4,12 +4,14 @@ using System.Threading.RateLimiting;
 using BlogAPI.API.Configuration;
 using BlogAPI.Infrastructure;
 using BlogAPI.Infrastructure.Data;
+using BlogAPI.API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -103,13 +105,19 @@ var rateLimitSettings = builder.Configuration
     .GetSection(RateLimitSettings.SectionName)
     .Get<RateLimitSettings>() ?? new RateLimitSettings();
 
+var redisSettings = builder.Configuration
+    .GetSection("RedisSettings")
+    .Get<RedisSettings>();
+
 if (rateLimitSettings.Enabled)
 {
+    var useRedisRateLimiting = redisSettings?.Enabled == true;
+
     builder.Services.AddRateLimiter(options =>
     {
         options.RejectionStatusCode = rateLimitSettings.StatusCode;
 
-        if (rateLimitSettings.Global.Enabled)
+        if (rateLimitSettings.Global.Enabled && !useRedisRateLimiting)
         {
             options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(context =>
             {
@@ -125,40 +133,31 @@ if (rateLimitSettings.Enabled)
             });
         }
 
-        options.AddPolicy("api-limit", context =>
+        if (useRedisRateLimiting)
         {
-            if (context.User.Identity?.IsAuthenticated == true)
-            {
-                var userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value
-                    ?? "anonymous";
+            var serviceProvider = builder.Services.BuildServiceProvider();
+            var redis = serviceProvider.GetService<IConnectionMultiplexer>();
+            var logger = serviceProvider.GetRequiredService<ILogger<CustomRedisRateLimiter>>();
 
-                return RateLimitPartition.GetFixedWindowLimiter(
-                    partitionKey: $"user-{userId}",
-                    factory: _ => new FixedWindowRateLimiterOptions
-                    {
-                        PermitLimit = rateLimitSettings.UserLimit.PermitLimit,
-                        Window = TimeSpan.FromSeconds(rateLimitSettings.UserLimit.WindowInSeconds),
-                        QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
-                        QueueLimit = rateLimitSettings.QueueRequests ? 1 : 0
-                    });
+            if (redis != null)
+            {
+                var redisRateLimiter = new CustomRedisRateLimiter(
+                    redis,
+                    logger,
+                    rateLimitSettings.IpLimit.PermitLimit,
+                    TimeSpan.FromSeconds(rateLimitSettings.IpLimit.WindowInSeconds));
+
+                options.AddPolicy("api-limit", redisRateLimiter);
             }
             else
             {
-                var ipAddress = context.Connection.RemoteIpAddress?.ToString()
-                    ?? context.Request.Headers["X-Forwarded-For"].FirstOrDefault()
-                    ?? "unknown";
-
-                return RateLimitPartition.GetFixedWindowLimiter(
-                    partitionKey: $"ip-{ipAddress}",
-                    factory: _ => new FixedWindowRateLimiterOptions
-                    {
-                        PermitLimit = rateLimitSettings.IpLimit.PermitLimit,
-                        Window = TimeSpan.FromSeconds(rateLimitSettings.IpLimit.WindowInSeconds),
-                        QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
-                        QueueLimit = rateLimitSettings.QueueRequests ? 1 : 0
-                    });
+                AddInMemoryRateLimitPolicy(options, rateLimitSettings);
             }
-        });
+        }
+        else
+        {
+            AddInMemoryRateLimitPolicy(options, rateLimitSettings);
+        }
 
         options.OnRejected = async (context, cancellationToken) =>
         {
@@ -181,6 +180,44 @@ if (rateLimitSettings.Enabled)
 
             await context.HttpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
         };
+    });
+}
+
+static void AddInMemoryRateLimitPolicy(RateLimiterOptions options, RateLimitSettings rateLimitSettings)
+{
+    options.AddPolicy("api-limit", context =>
+    {
+        if (context.User.Identity?.IsAuthenticated == true)
+        {
+            var userId = context.User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                ?? "anonymous";
+
+            return RateLimitPartition.GetFixedWindowLimiter(
+                partitionKey: $"user-{userId}",
+                factory: _ => new FixedWindowRateLimiterOptions
+                {
+                    PermitLimit = rateLimitSettings.UserLimit.PermitLimit,
+                    Window = TimeSpan.FromSeconds(rateLimitSettings.UserLimit.WindowInSeconds),
+                    QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                    QueueLimit = rateLimitSettings.QueueRequests ? 1 : 0
+                });
+        }
+        else
+        {
+            var ipAddress = context.Connection.RemoteIpAddress?.ToString()
+                ?? context.Request.Headers["X-Forwarded-For"].FirstOrDefault()
+                ?? "unknown";
+
+            return RateLimitPartition.GetFixedWindowLimiter(
+                partitionKey: $"ip-{ipAddress}",
+                factory: _ => new FixedWindowRateLimiterOptions
+                {
+                    PermitLimit = rateLimitSettings.IpLimit.PermitLimit,
+                    Window = TimeSpan.FromSeconds(rateLimitSettings.IpLimit.WindowInSeconds),
+                    QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                    QueueLimit = rateLimitSettings.QueueRequests ? 1 : 0
+                });
+        }
     });
 }
 

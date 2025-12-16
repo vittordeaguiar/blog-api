@@ -138,3 +138,5 @@
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.API/obj/Debug/net9.0/ref/BlogAPI.API.dll
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.API/bin/Debug/net9.0/AutoMapper.dll
 /Users/vittordeaguiar/www/blog-api/src/BlogAPI.API/bin/Debug/net9.0/AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+/Users/vittordeaguiar/www/blog-api/src/BlogAPI.API/bin/Debug/net9.0/Pipelines.Sockets.Unofficial.dll
+/Users/vittordeaguiar/www/blog-api/src/BlogAPI.API/bin/Debug/net9.0/StackExchange.Redis.dll

@@ -611,11 +611,34 @@
           }
         }
       },
+      "Pipelines.Sockets.Unofficial/2.2.8": {
+        "dependencies": {
+          "System.IO.Pipelines": "7.0.0"
+        },
+        "runtime": {
+          "lib/net5.0/Pipelines.Sockets.Unofficial.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "2.2.8.1080"
+          }
+        }
+      },
       "Scalar.AspNetCore/2.11.6": {
         "runtime": {
           "lib/net9.0/Scalar.AspNetCore.dll": {
             "assemblyVersion": "2.11.6.0",
             "fileVersion": "2.11.6.0"
+          }
+        }
+      },
+      "StackExchange.Redis/2.8.16": {
+        "dependencies": {
+          "Microsoft.Extensions.Logging.Abstractions": "9.0.0",
+          "Pipelines.Sockets.Unofficial": "2.2.8"
+        },
+        "runtime": {
+          "lib/net6.0/StackExchange.Redis.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.8.16.12844"
           }
         }
       },
@@ -740,6 +763,7 @@
           "BlogAPI.Domain": "1.0.0",
           "Microsoft.EntityFrameworkCore": "9.0.0",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "9.0.2",
+          "StackExchange.Redis": "2.8.16",
           "System.IdentityModel.Tokens.Jwt": "8.15.0"
         },
         "runtime": {
@@ -1058,12 +1082,26 @@
       "path": "npgsql.entityframeworkcore.postgresql/9.0.2",
       "hashPath": "npgsql.entityframeworkcore.postgresql.9.0.2.nupkg.sha512"
     },
+    "Pipelines.Sockets.Unofficial/2.2.8": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-zG2FApP5zxSx6OcdJQLbZDk2AVlN2BNQD6MorwIfV6gVj0RRxWPEp2LXAxqDGZqeNV1Zp0BNPcNaey/GXmTdvQ==",
+      "path": "pipelines.sockets.unofficial/2.2.8",
+      "hashPath": "pipelines.sockets.unofficial.2.2.8.nupkg.sha512"
+    },
     "Scalar.AspNetCore/2.11.6": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-Sq55A++4V08c6i+o80v1pUULL3AoEWv+HJcxOhbevt3t5W9YVJEZ1BdEIEHbYZA3Otb6L6G0BurJ5xBQSM2mzA==",
       "path": "scalar.aspnetcore/2.11.6",
       "hashPath": "scalar.aspnetcore.2.11.6.nupkg.sha512"
+    },
+    "StackExchange.Redis/2.8.16": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-WaoulkOqOC9jHepca3JZKFTqndCWab5uYS7qCzmiQDlrTkFaDN7eLSlEfHycBxipRnQY9ppZM7QSsWAwUEGblw==",
+      "path": "stackexchange.redis/2.8.16",
+      "hashPath": "stackexchange.redis.2.8.16.nupkg.sha512"
     },
     "System.CodeDom/6.0.0": {
       "type": "package",

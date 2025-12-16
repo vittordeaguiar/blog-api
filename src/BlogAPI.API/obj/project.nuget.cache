@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "Vn3msEvXPEU=",
+  "dgSpecHash": "5mA7iHyxKko=",
   "success": true,
   "projectFilePath": "/Users/vittordeaguiar/www/blog-api/src/BlogAPI.API/BlogAPI.API.csproj",
   "expectedPackageFiles": [
@@ -47,7 +47,9 @@
     "/Users/vittordeaguiar/.nuget/packages/mono.texttemplating/3.0.0/mono.texttemplating.3.0.0.nupkg.sha512",
     "/Users/vittordeaguiar/.nuget/packages/npgsql/9.0.2/npgsql.9.0.2.nupkg.sha512",
     "/Users/vittordeaguiar/.nuget/packages/npgsql.entityframeworkcore.postgresql/9.0.2/npgsql.entityframeworkcore.postgresql.9.0.2.nupkg.sha512",
+    "/Users/vittordeaguiar/.nuget/packages/pipelines.sockets.unofficial/2.2.8/pipelines.sockets.unofficial.2.2.8.nupkg.sha512",
     "/Users/vittordeaguiar/.nuget/packages/scalar.aspnetcore/2.11.6/scalar.aspnetcore.2.11.6.nupkg.sha512",
+    "/Users/vittordeaguiar/.nuget/packages/stackexchange.redis/2.8.16/stackexchange.redis.2.8.16.nupkg.sha512",
     "/Users/vittordeaguiar/.nuget/packages/system.codedom/6.0.0/system.codedom.6.0.0.nupkg.sha512",
     "/Users/vittordeaguiar/.nuget/packages/system.collections.immutable/7.0.0/system.collections.immutable.7.0.0.nupkg.sha512",
     "/Users/vittordeaguiar/.nuget/packages/system.composition/7.0.0/system.composition.7.0.0.nupkg.sha512",

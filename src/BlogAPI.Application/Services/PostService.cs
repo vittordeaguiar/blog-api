@@ -12,6 +12,7 @@ public class PostService(
     IPostRepository postRepository,
     IUserRepository userRepository,
     ICategoryRepository categoryRepository,
+    ICacheService cacheService,
     IMapper mapper)
     : IPostService
 {
@@ -38,6 +39,8 @@ public class PostService(
 
         var savedPost = await postRepository.AddAsync(post);
 
+        await cacheService.RemoveByPatternAsync(CacheKeys.AllPosts());
+
         return new PostResponseDto(
             Id: savedPost.Id,
             Title: savedPost.Title,
@@ -61,22 +64,49 @@ public class PostService(
         if (pageSize <= 0) throw new ArgumentException("PageSize must be greater than 0", nameof(pageSize));
         if (pageSize > MaxPageSize) throw new ArgumentException($"PageSize cannot exceed {MaxPageSize}", nameof(pageSize));
 
-        var (posts, totalCount) = await postRepository.GetPagedAsync(page, pageSize);
-        var postList = mapper.Map<IEnumerable<PostResponseDto>>(posts);
+        var cacheKey = CacheKeys.PostsPage(page, pageSize, null, null);
 
-        return new PagedResult<PostResponseDto>(postList, totalCount, page, pageSize);
+        return await cacheService.GetOrSetAsync(
+            cacheKey,
+            async () =>
+            {
+                var (posts, totalCount) = await postRepository.GetPagedAsync(page, pageSize);
+                var postList = mapper.Map<IEnumerable<PostResponseDto>>(posts);
+                return new PagedResult<PostResponseDto>(postList, totalCount, page, pageSize);
+            },
+            TimeSpan.FromMinutes(5)) ?? new PagedResult<PostResponseDto>([], 0, page, pageSize);
     }
 
     public async Task<PostResponseDto> GetPostByIdAsync(Guid id)
     {
-        var post = await postRepository.GetByIdAsync(id);
-        return post is null ? throw new DomainException($"Post with ID {id} not found") : mapper.Map<PostResponseDto>(post);
+        var cacheKey = CacheKeys.PostById(id);
+
+        var cached = await cacheService.GetOrSetAsync(
+            cacheKey,
+            async () =>
+            {
+                var post = await postRepository.GetByIdAsync(id);
+                return post is null ? null : mapper.Map<PostResponseDto>(post);
+            },
+            TimeSpan.FromMinutes(10));
+
+        return cached ?? throw new DomainException($"Post with ID {id} not found");
     }
 
     public async Task<PostResponseDto> GetPostBySlugAsync(string slug)
     {
-        var post = await postRepository.GetBySlugAsync(slug);
-        return post is null ? throw new DomainException($"Post with slug {slug} not found") : mapper.Map<PostResponseDto>(post);
+        var cacheKey = CacheKeys.PostBySlug(slug);
+
+        var cached = await cacheService.GetOrSetAsync(
+            cacheKey,
+            async () =>
+            {
+                var post = await postRepository.GetBySlugAsync(slug);
+                return post is null ? null : mapper.Map<PostResponseDto>(post);
+            },
+            TimeSpan.FromMinutes(10));
+
+        return cached ?? throw new DomainException($"Post with slug {slug} not found");
     }
 
     public async Task<PostResponseDto> UpdatePostAsync(Guid id, UpdatePostDto dto)
@@ -84,6 +114,7 @@ public class PostService(
         var post = await postRepository.GetByIdAsync(id);
         if (post is null) throw new DomainException($"Post with ID {id} not found");
 
+        var oldSlug = post.Slug;
         post.Update(dto.Title, dto.Content, dto.Slug);
 
         if (dto.CategoryIds is not null)
@@ -104,15 +135,29 @@ public class PostService(
 
         await postRepository.UpdateAsync(post);
 
+        await cacheService.RemoveByPatternAsync(CacheKeys.AllPosts());
+        await cacheService.RemoveAsync(CacheKeys.PostById(id));
+        await cacheService.RemoveAsync(CacheKeys.PostBySlug(oldSlug));
+        if (oldSlug != dto.Slug)
+        {
+            await cacheService.RemoveAsync(CacheKeys.PostBySlug(dto.Slug));
+        }
+
         return mapper.Map<PostResponseDto>(post);
     }
 
     public async Task DeletePostAsync(Guid id)
     {
-        var exists = await postRepository.ExistsAsync(id);
-        if (!exists) throw new DomainException($"Post with ID {id} not found");
+        var post = await postRepository.GetByIdAsync(id);
+        if (post is null) throw new DomainException($"Post with ID {id} not found");
+
+        var slug = post.Slug;
 
         await postRepository.DeleteAsync(id);
+
+        await cacheService.RemoveByPatternAsync(CacheKeys.AllPosts());
+        await cacheService.RemoveAsync(CacheKeys.PostById(id));
+        await cacheService.RemoveAsync(CacheKeys.PostBySlug(slug));
     }
 
     public async Task<PostResponseDto> PublishPostAsync(Guid id)
@@ -122,6 +167,10 @@ public class PostService(
 
         post.Publish();
         await postRepository.UpdateAsync(post);
+
+        await cacheService.RemoveByPatternAsync(CacheKeys.AllPosts());
+        await cacheService.RemoveAsync(CacheKeys.PostById(id));
+        await cacheService.RemoveAsync(CacheKeys.PostBySlug(post.Slug));
 
         return mapper.Map<PostResponseDto>(post);
     }
@@ -133,6 +182,10 @@ public class PostService(
 
         post.Unpublish();
         await postRepository.UpdateAsync(post);
+
+        await cacheService.RemoveByPatternAsync(CacheKeys.AllPosts());
+        await cacheService.RemoveAsync(CacheKeys.PostById(id));
+        await cacheService.RemoveAsync(CacheKeys.PostBySlug(post.Slug));
 
         return mapper.Map<PostResponseDto>(post);
     }

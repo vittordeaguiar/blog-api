@@ -16,6 +16,7 @@ public class PostServiceTests
     private readonly Mock<IPostRepository> _postRepositoryMock;
     private readonly Mock<IUserRepository> _userRepositoryMock;
     private readonly Mock<ICategoryRepository> _categoryRepositoryMock;
+    private readonly Mock<ICacheService> _cacheServiceMock;
     private readonly PostService _postService;
 
     public PostServiceTests()
@@ -23,6 +24,7 @@ public class PostServiceTests
         _postRepositoryMock = new Mock<IPostRepository>();
         _userRepositoryMock = new Mock<IUserRepository>();
         _categoryRepositoryMock = new Mock<ICategoryRepository>();
+        _cacheServiceMock = new Mock<ICacheService>();
 
         var config = new MapperConfiguration(cfg => cfg.AddProfile<PostMappingProfile>());
         var mapper = config.CreateMapper();
@@ -31,6 +33,7 @@ public class PostServiceTests
             _postRepositoryMock.Object,
             _userRepositoryMock.Object,
             _categoryRepositoryMock.Object,
+            _cacheServiceMock.Object,
             mapper
         );
     }

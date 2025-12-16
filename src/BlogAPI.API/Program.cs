@@ -47,6 +47,8 @@ builder.Services.AddOpenApi(options =>
 {
     options.AddDocumentTransformer((document, context, cancellationToken) =>
     {
+        document.Servers = [new OpenApiServer { Url = "http://localhost:8080" }];
+
         document.Components ??= new OpenApiComponents();
         document.Components.SecuritySchemes.Add("Bearer", new OpenApiSecurityScheme
         {

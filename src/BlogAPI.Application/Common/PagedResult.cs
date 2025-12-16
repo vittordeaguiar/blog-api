@@ -1,19 +1,10 @@
 namespace BlogAPI.Application.Common;
 
-public class PagedResult<T>
+public class PagedResult<T>(IEnumerable<T> items, int totalCount, int page, int pageSize)
 {
-    public PagedResult(IEnumerable<T> items, int totalCount, int page, int pageSize)
-    {
-        Items = items;
-        TotalCount = totalCount;
-        Page = page;
-        PageSize = pageSize;
-        TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
-    }
-
-    public IEnumerable<T> Items { get; }
-    public int TotalCount { get; }
-    public int Page { get; }
-    public int PageSize { get; }
-    public int TotalPages { get; }
+    public IEnumerable<T> Items { get; } = items;
+    public int TotalCount { get; } = totalCount;
+    public int Page { get; } = page;
+    public int PageSize { get; } = pageSize;
+    public int TotalPages { get; } = (int)Math.Ceiling(totalCount / (double)pageSize);
 }

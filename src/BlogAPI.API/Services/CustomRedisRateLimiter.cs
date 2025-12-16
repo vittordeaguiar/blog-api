@@ -7,24 +7,16 @@ using StackExchange.Redis;
 
 namespace BlogAPI.API.Services;
 
-public class CustomRedisRateLimiter : IRateLimiterPolicy<string>
+public class CustomRedisRateLimiter(
+    IConnectionMultiplexer redis,
+    ILogger<CustomRedisRateLimiter> logger,
+    int permitLimit,
+    TimeSpan window) : IRateLimiterPolicy<string>
 {
-    private readonly IConnectionMultiplexer _redis;
-    private readonly ILogger<CustomRedisRateLimiter> _logger;
-    private readonly int _permitLimit;
-    private readonly TimeSpan _window;
-
-    public CustomRedisRateLimiter(
-        IConnectionMultiplexer redis,
-        ILogger<CustomRedisRateLimiter> logger,
-        int permitLimit,
-        TimeSpan window)
-    {
-        _redis = redis;
-        _logger = logger;
-        _permitLimit = permitLimit;
-        _window = window;
-    }
+    private readonly IConnectionMultiplexer _redis = redis;
+    private readonly ILogger<CustomRedisRateLimiter> _logger = logger;
+    private readonly int _permitLimit = permitLimit;
+    private readonly TimeSpan _window = window;
 
     public Func<OnRejectedContext, CancellationToken, ValueTask>? OnRejected { get; } = (context, cancellationToken) =>
     {

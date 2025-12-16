@@ -7,7 +7,7 @@ public class Category : Entity
 {
     protected Category()
     {
-        Posts = new List<Post>();
+        Posts = [];
     }
 
     public Category(string name, string slug, string? description = null)
@@ -15,7 +15,7 @@ public class Category : Entity
         Name = name;
         Slug = slug;
         Description = description;
-        Posts = new List<Post>();
+        Posts = [];
 
         Validate(this, new CategoryValidator());
     }

@@ -7,7 +7,7 @@ public class Post : Entity
 {
     protected Post()
     {
-        Categories = new List<Category>();
+        Categories = [];
     }
 
     public Post(string title, string content, string slug, Guid authorId)
@@ -17,7 +17,7 @@ public class Post : Entity
         Slug = slug;
         AuthorId = authorId;
         IsPublished = false;
-        Categories = new List<Category>();
+        Categories = [];
 
         Validate(this, new PostValidator());
     }

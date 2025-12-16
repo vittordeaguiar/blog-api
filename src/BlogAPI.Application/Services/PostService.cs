@@ -18,20 +18,16 @@ public class PostService(
 {
     public async Task<PostResponseDto> CreatePostAsync(CreatePostDto dto, Guid authorId)
     {
-        var author = await userRepository.GetByIdAsync(authorId);
-        if (author is null) throw new DomainException("Author not found");
-
+        var author = await userRepository.GetByIdAsync(authorId) ?? throw new DomainException("Author not found");
         var post = new Post(dto.Title, dto.Content, dto.Slug, authorId);
 
         var categories = new List<Category>();
 
-        if (dto.CategoryIds is not null && dto.CategoryIds.Any())
+        if (dto.CategoryIds is not null && dto.CategoryIds.Count != 0)
         {
             foreach (var categoryId in dto.CategoryIds)
             {
-                var category = await categoryRepository.GetByIdAsync(categoryId);
-                if (category is null) throw new DomainException($"Category with ID {categoryId} not found");
-
+                var category = await categoryRepository.GetByIdAsync(categoryId) ?? throw new DomainException($"Category with ID {categoryId} not found");
                 post.AddCategory(category);
                 categories.Add(category);
             }
@@ -111,9 +107,7 @@ public class PostService(
 
     public async Task<PostResponseDto> UpdatePostAsync(Guid id, UpdatePostDto dto)
     {
-        var post = await postRepository.GetByIdAsync(id);
-        if (post is null) throw new DomainException($"Post with ID {id} not found");
-
+        var post = await postRepository.GetByIdAsync(id) ?? throw new DomainException($"Post with ID {id} not found");
         var oldSlug = post.Slug;
         post.Update(dto.Title, dto.Content, dto.Slug);
 
@@ -126,9 +120,7 @@ public class PostService(
 
             foreach (var categoryId in dto.CategoryIds)
             {
-                var category = await categoryRepository.GetByIdAsync(categoryId);
-                if (category is null) throw new DomainException($"Category with ID {categoryId} not found");
-
+                var category = await categoryRepository.GetByIdAsync(categoryId) ?? throw new DomainException($"Category with ID {categoryId} not found");
                 post.AddCategory(category);
             }
         }
@@ -148,9 +140,7 @@ public class PostService(
 
     public async Task DeletePostAsync(Guid id)
     {
-        var post = await postRepository.GetByIdAsync(id);
-        if (post is null) throw new DomainException($"Post with ID {id} not found");
-
+        var post = await postRepository.GetByIdAsync(id) ?? throw new DomainException($"Post with ID {id} not found");
         var slug = post.Slug;
 
         await postRepository.DeleteAsync(id);
@@ -162,9 +152,7 @@ public class PostService(
 
     public async Task<PostResponseDto> PublishPostAsync(Guid id)
     {
-        var post = await postRepository.GetByIdAsync(id);
-        if (post is null) throw new DomainException($"Post with ID {id} not found");
-
+        var post = await postRepository.GetByIdAsync(id) ?? throw new DomainException($"Post with ID {id} not found");
         post.Publish();
         await postRepository.UpdateAsync(post);
 
@@ -177,9 +165,7 @@ public class PostService(
 
     public async Task<PostResponseDto> UnpublishPostAsync(Guid id)
     {
-        var post = await postRepository.GetByIdAsync(id);
-        if (post is null) throw new DomainException($"Post with ID {id} not found");
-
+        var post = await postRepository.GetByIdAsync(id) ?? throw new DomainException($"Post with ID {id} not found");
         post.Unpublish();
         await postRepository.UpdateAsync(post);
 

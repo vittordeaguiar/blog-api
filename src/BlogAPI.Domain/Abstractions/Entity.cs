@@ -9,7 +9,7 @@ public abstract class Entity
     public DateTime CreatedAt { get; protected set; } = DateTime.UtcNow;
     public DateTime? UpdatedAt { get; protected set; }
 
-    protected void Validate<T>(T instance, AbstractValidator<T> validator)
+    protected static void Validate<T>(T instance, AbstractValidator<T> validator)
     {
         var result = validator.Validate(instance);
         if (result.IsValid) return;

@@ -17,10 +17,14 @@ public class RedisRateLimiter(
     public override RateLimiterStatistics? GetStatistics() => null;
 
     protected override RateLimitLease AttemptAcquireCore(int permitCount)
-        => AttemptAcquireCoreAsync(permitCount).GetAwaiter().GetResult();
+    {
+        return AttemptAcquireCoreAsync(permitCount).GetAwaiter().GetResult();
+    }
 
     protected override async ValueTask<RateLimitLease> AcquireAsyncCore(int permitCount, CancellationToken cancellationToken = default)
-        => await AttemptAcquireCoreAsync(permitCount, cancellationToken);
+    {
+        return await AttemptAcquireCoreAsync(permitCount, cancellationToken);
+    }
 
     private async Task<RateLimitLease> AttemptAcquireCoreAsync(int permitCount, CancellationToken cancellationToken = default)
     {

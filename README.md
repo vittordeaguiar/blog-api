@@ -415,3 +415,8 @@ GitHub: [vittordeaguiar](https://github.com/vittordeaguiar)
 ## Licença
 
 Este projeto foi desenvolvido para fins educacionais e como parte do meu portfólio profissional. Sinta-se livre para explorar o código e usar como referência para seus próprios projetos.
+
+## Screenshots
+<img width="1892" height="943" alt="image" src="https://github.com/user-attachments/assets/d000ecc9-3d66-4a2a-8b9d-d88e74000acf" />
+<img width="1421" height="860" alt="image" src="https://github.com/user-attachments/assets/c0f1ff96-ca01-4aac-adbe-f1e79bed84d0" />
+

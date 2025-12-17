@@ -3,25 +3,22 @@ import { Button } from "@/shared/ui/button";
 
 export function Hero() {
   return (
-    <section className="relative min-h-[500px] flex items-center justify-center overflow-hidden">
-      {/* Background animado com gradientes */}
-      <div className="absolute inset-0 bg-gradient-to-br from-brand/10 via-purple-500/10 to-pink-500/10" />
+    <section className="relative min-h-125 flex items-center justify-center overflow-hidden">
+      <div className="absolute inset-0 bg-linear-to-br from-brand/10 via-purple-500/10 to-pink-500/10" />
 
-      {/* Padrão de grade no fundo */}
       <div
         className="absolute inset-0 opacity-[0.02]"
         style={{
           backgroundImage: `linear-gradient(to right, oklch(0.21 0.006 285.885) 1px, transparent 1px), linear-gradient(to bottom, oklch(0.21 0.006 285.885) 1px, transparent 1px)`,
-          backgroundSize: '4rem 4rem'
+          backgroundSize: "4rem 4rem",
         }}
       />
 
-      {/* Content */}
       <div className="container relative z-10 mx-auto px-4">
         <div className="max-w-4xl mx-auto text-center space-y-6">
           <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
             Descubra Histórias Que{" "}
-            <span className="bg-gradient-to-r from-brand to-purple-600 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-brand to-purple-600 bg-clip-text text-transparent">
               Importam
             </span>
           </h1>

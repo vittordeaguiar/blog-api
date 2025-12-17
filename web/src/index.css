@@ -10,7 +10,6 @@
   --font-sans: "Inter Variable", system-ui, sans-serif;
   --font-display: "Manrope", "Inter Variable", sans-serif;
 
-  /* Fluid Typography */
   --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
   --text-sm: clamp(0.875rem, 0.8rem + 0.3vw, 1rem);
   --text-base: clamp(1rem, 0.95rem + 0.35vw, 1.125rem);
@@ -20,7 +19,6 @@
   --text-3xl: clamp(1.875rem, 1.5rem + 1.2vw, 2.5rem);
   --text-4xl: clamp(2.25rem, 1.8rem + 1.5vw, 3rem);
 
-  /* Configurações Globais */
   font-family: var(--font-sans);
   line-height: 1.5;
   font-weight: 400;
@@ -32,7 +30,7 @@
 
   --radius: 0.625rem;
 
-  /* --- LIGHT MODE (HEX - Zinc Palette) --- */
+  /* --- LIGHT MODE --- */
   --background: #ffffff;
   --foreground: #09090b; /* Zinc 950 */
 
@@ -65,7 +63,6 @@
   --brand: #6366f1; /* Indigo 500 */
   --brand-foreground: #ffffff;
 
-  /* Charts (Modern Palette) */
   --chart-1: #e76e50;
   --chart-2: #2a9d8f;
   --chart-3: #264653;
@@ -84,7 +81,7 @@
 }
 
 .dark {
-  /* --- DARK MODE (HEX - Zinc Palette) --- */
+  /* --- DARK MODE --- */
   --background: #09090b; /* Zinc 950 */
   --foreground: #fafafa; /* Zinc 50 */
 
@@ -113,18 +110,15 @@
   --input: #27272a;
   --ring: #d4d4d8; /* Zinc 300 */
 
-  /* Brand Colors Dark */
   --brand: #818cf8; /* Indigo 400 (Mais claro para dark mode) */
   --brand-foreground: #ffffff;
 
-  /* Charts Dark */
   --chart-1: #2a9d8f;
   --chart-2: #e76e50;
   --chart-3: #f4a261;
   --chart-4: #e9c46a;
   --chart-5: #264653;
 
-  /* Sidebar Dark */
   --sidebar: #09090b;
   --sidebar-foreground: #fafafa;
   --sidebar-primary: #6366f1;
@@ -191,7 +185,6 @@
     min-height: 100vh;
   }
 
-  /* Modernização dos Headings */
   h1,
   h2,
   h3,
@@ -204,19 +197,16 @@
     line-height: 1.25;
   }
 
-  /* Link Padrão */
   a {
     @apply text-brand font-medium hover:text-brand/80 transition-colors no-underline;
   }
 }
 
-/* Focus Management */
 *:focus-visible {
   outline: 2px solid var(--color-ring);
   outline-offset: 2px;
 }
 
-/* Skip Link for Accessibility */
 .skip-link {
   position: absolute;
   top: -40px;
@@ -236,7 +226,6 @@
   left: 8px;
 }
 
-/* Shimmer Animation for Skeletons */
 @keyframes shimmer {
   100% {
     transform: translateX(100%);
@@ -245,4 +234,8 @@
 
 .animate-shimmer {
   animation: shimmer 2s infinite;
+}
+
+.debug {
+  border: 2px solid red;
 }

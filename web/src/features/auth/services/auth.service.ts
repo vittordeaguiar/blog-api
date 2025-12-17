@@ -1,20 +1,5 @@
 import { api } from "@/shared/lib/axios";
-
-interface LoginRequest {
-  email: string;
-  password: string;
-}
-
-interface RegisterRequest {
-  name: string;
-  email: string;
-  password: string;
-  role: "Author" | "Admin";
-}
-
-interface AuthResponse {
-  token: string;
-}
+import type { LoginRequest, RegisterRequest, AuthResponse } from "../types/auth.types";
 
 export const authService = {
   login: async (credentials: LoginRequest) => {

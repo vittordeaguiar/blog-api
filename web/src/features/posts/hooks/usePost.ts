@@ -1,11 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
-import { api } from "@/shared/lib/axios";
+import { postsService } from "../services/posts.service";
+import type { PostsQueryParams, PagedResult, Post } from "../types/post.types";
 
-export function usePosts() {
-  return useQuery({
-    queryKey: ["posts"],
+export function usePosts(params?: PostsQueryParams) {
+  return useQuery<PagedResult<Post>>({
+    queryKey: ["posts", params],
     queryFn: async () => {
-      const { data } = await api.get("/api/v1/posts");
+      const { data } = await postsService.getPosts(params);
       return data;
     },
   });

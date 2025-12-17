@@ -1,10 +1,26 @@
 @import 'tailwindcss';
 @import "tw-animate-css";
+@import '@fontsource-variable/inter';
+@import '@fontsource/manrope';
 
 @custom-variant dark (&:is(.dark *));
 
 :root {
-    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    /* Typography System */
+    --font-sans: 'Inter Variable', system-ui, sans-serif;
+    --font-display: 'Manrope', 'Inter Variable', sans-serif;
+
+    /* Fluid Typography */
+    --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+    --text-sm: clamp(0.875rem, 0.8rem + 0.3vw, 1rem);
+    --text-base: clamp(1rem, 0.95rem + 0.35vw, 1.125rem);
+    --text-lg: clamp(1.125rem, 1rem + 0.5vw, 1.25rem);
+    --text-xl: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+    --text-2xl: clamp(1.5rem, 1.3rem + 0.8vw, 2rem);
+    --text-3xl: clamp(1.875rem, 1.5rem + 1.2vw, 2.5rem);
+    --text-4xl: clamp(2.25rem, 1.8rem + 1.5vw, 3rem);
+
+    font-family: var(--font-sans);
     line-height: 1.5;
     font-weight: 400;
 
@@ -35,6 +51,9 @@
     --border: oklch(0.92 0.004 286.32);
     --input: oklch(0.92 0.004 286.32);
     --ring: oklch(0.705 0.015 286.067);
+    /* Brand Colors */
+    --brand: oklch(0.65 0.22 265);
+    --brand-foreground: oklch(1 0 0);
     --chart-1: oklch(0.646 0.222 41.116);
     --chart-2: oklch(0.6 0.118 184.704);
     --chart-3: oklch(0.398 0.07 227.392);
@@ -65,6 +84,13 @@ body {
     place-items: center;
     min-width: 320px;
     min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.25;
 }
 
 h1 {
@@ -168,6 +194,9 @@ button:focus-visible {
     --border: oklch(1 0 0 / 10%);
     --input: oklch(1 0 0 / 15%);
     --ring: oklch(0.552 0.016 285.938);
+    /* Brand Colors Dark */
+    --brand: oklch(0.75 0.20 265);
+    --brand-foreground: oklch(0.1 0 0);
     --chart-1: oklch(0.488 0.243 264.376);
     --chart-2: oklch(0.696 0.17 162.48);
     --chart-3: oklch(0.769 0.188 70.08);
@@ -190,4 +219,39 @@ button:focus-visible {
   body {
     @apply bg-background text-foreground;
     }
+}
+
+/* Focus Management */
+*:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+/* Skip Link for Accessibility */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--brand);
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+  z-index: 100;
+  border-radius: 4px;
+}
+
+.skip-link:focus {
+  top: 8px;
+  left: 8px;
+}
+
+/* Shimmer Animation for Skeletons */
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
 }

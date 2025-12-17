@@ -1,6 +1,7 @@
 import type { RouteObject } from "react-router-dom";
 import LoginPage from "@/features/auth/pages/LoginPage";
 import PostsListPage from "@/features/posts/pages/PostsListPage";
+import PostDetailPage from "@/features/posts/pages/PostDetailPage";
 import RootLayout from "@/shared/layouts/RootLayout";
 
 export const routes: RouteObject[] = [
@@ -11,6 +12,10 @@ export const routes: RouteObject[] = [
       {
         index: true,
         element: <PostsListPage />,
+      },
+      {
+        path: "posts/:slug",
+        element: <PostDetailPage />,
       },
       {
         path: "login",

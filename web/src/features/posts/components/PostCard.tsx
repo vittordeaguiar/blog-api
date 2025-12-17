@@ -1,0 +1,96 @@
+import { Link } from "react-router";
+import { User, Calendar, ArrowRight } from "lucide-react";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "@/shared/ui/card";
+import { Badge } from "@/shared/ui/badge";
+import { Button } from "@/shared/ui/button";
+import type { Post } from "../types/post.types";
+import { truncate } from "@/shared/lib/utils";
+import { formatRelativeTime } from "@/shared/lib/date";
+
+interface PostCardProps {
+  post: Post;
+}
+
+export default function PostCard({ post }: PostCardProps) {
+  const visibleCategories = post.categories.slice(0, 3);
+  const remainingCount = post.categories.length - 3;
+
+  return (
+    <article className="group h-full">
+      <Card className="relative overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 border-0 bg-card/50 backdrop-blur-sm h-full flex flex-col">
+        {/* Gradient overlay on hover */}
+        <div className="absolute inset-0 bg-gradient-to-br from-brand/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+        {/* Colored accent bar */}
+        <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-brand to-purple-600" />
+
+        {/* Content with relative positioning */}
+        <div className="relative flex-1 flex flex-col">
+          <CardHeader>
+            <CardTitle className="text-xl font-semibold line-clamp-2 group-hover:text-brand transition-colors duration-300">
+              {post.title}
+            </CardTitle>
+            <CardDescription className="line-clamp-3">
+              {truncate(post.content, 150)}
+            </CardDescription>
+          </CardHeader>
+
+          <CardContent className="space-y-4 flex-1">
+            <div className="space-y-2 text-sm text-muted-foreground">
+              <div className="flex items-center gap-2">
+                <User className="size-4" />
+                <span>{post.authorName}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Calendar className="size-4" />
+                <span>{formatRelativeTime(post.publishedAt || post.createdAt)}</span>
+              </div>
+            </div>
+
+            {post.categories.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {visibleCategories.map((category) => (
+                  <Badge
+                    key={category.id}
+                    variant="secondary"
+                    className="transition-colors group-hover:bg-brand/10 group-hover:text-brand group-hover:border-brand/20"
+                  >
+                    {category.name}
+                  </Badge>
+                ))}
+                {remainingCount > 0 && (
+                  <Badge
+                    variant="secondary"
+                    className="transition-colors group-hover:bg-brand/10 group-hover:text-brand group-hover:border-brand/20"
+                  >
+                    +{remainingCount}
+                  </Badge>
+                )}
+              </div>
+            )}
+          </CardContent>
+
+          <CardFooter>
+            <Button
+              asChild
+              variant="ghost"
+              className="w-full group-hover:bg-brand/10 group-hover:text-brand transition-colors"
+            >
+              <Link to={`/posts/${post.slug}`}>
+                Ler mais
+                <ArrowRight className="ml-2 size-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </Button>
+          </CardFooter>
+        </div>
+      </Card>
+    </article>
+  );
+}

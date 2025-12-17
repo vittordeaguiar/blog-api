@@ -24,7 +24,6 @@ export function UserDropdown() {
     );
   }
 
-  // Gerar iniciais do usuário
   const initials = user.name
     .split(" ")
     .map((n) => n[0])
@@ -52,9 +51,7 @@ export function UserDropdown() {
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none">{user.name}</p>
-            <p className="text-xs leading-none text-muted-foreground">
-              {user.email}
-            </p>
+            <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />

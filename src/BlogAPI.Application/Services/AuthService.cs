@@ -12,7 +12,7 @@ public class AuthService(
     ITokenService tokenService)
     : IAuthService
 {
-    public async Task<string> LoginAsync(LoginDto dto)
+    public async Task<LoginResponseDto> LoginAsync(LoginDto dto)
     {
         var user = await userRepository.GetByEmailAsync(dto.Email);
 
@@ -21,7 +21,9 @@ public class AuthService(
             throw new UnauthorizedAccessException("Invalid credentials");
         }
 
-        return tokenService.GenerateToken(user);
+        var response = new LoginResponseDto(Username: user.Name, Token: tokenService.GenerateToken(user));
+
+        return response;
     }
 
     public async Task RegisterAsync(RegisterUserDto dto)

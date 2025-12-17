@@ -25,13 +25,10 @@ export default function PostCard({ post }: PostCardProps) {
   return (
     <article className="group h-full">
       <Card className="relative overflow-hidden hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 border-0 bg-card/50 backdrop-blur-sm h-full flex flex-col">
-        {/* Gradient overlay on hover */}
         <div className="absolute inset-0 bg-gradient-to-br from-brand/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-        {/* Colored accent bar */}
         <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-brand to-purple-600" />
 
-        {/* Content with relative positioning */}
         <div className="relative flex-1 flex flex-col">
           <CardHeader>
             <CardTitle className="text-xl font-semibold line-clamp-2 group-hover:text-brand transition-colors duration-300">

@@ -4,6 +4,6 @@ namespace BlogAPI.Application.Interfaces;
 
 public interface IAuthService
 {
-    Task<string> LoginAsync(LoginDto dto);
+    Task<LoginResponseDto> LoginAsync(LoginDto dto);
     Task RegisterAsync(RegisterUserDto dto);
 }

@@ -12,7 +12,7 @@ public class AuthController(IAuthService authService) : ControllerBase
     public async Task<IActionResult> Register([FromBody] RegisterUserDto dto)
     {
         await authService.RegisterAsync(dto);
-        return Created("", new { message = "User created successfully" });
+        return Created(string.Empty, new { message = "User created successfully" });
     }
 
     [HttpPost("login")]

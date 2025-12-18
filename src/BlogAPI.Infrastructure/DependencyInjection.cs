@@ -53,6 +53,8 @@ public static class DependencyInjection
         services.AddScoped<ICategoryRepository, CategoryRepository>();
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
+        services.AddScoped<ISlugGenerator, SlugGenerator>();
+
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IPostService, PostService>();
         services.AddScoped<ICategoryService, CategoryService>();

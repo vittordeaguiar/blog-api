@@ -17,6 +17,7 @@ public class PostServiceTests
     private readonly Mock<IUserRepository> _userRepositoryMock;
     private readonly Mock<ICategoryRepository> _categoryRepositoryMock;
     private readonly Mock<ICacheService> _cacheServiceMock;
+    private readonly Mock<ISlugGenerator> _slugGeneratorMock;
     private readonly PostService _postService;
 
     public PostServiceTests()
@@ -25,6 +26,7 @@ public class PostServiceTests
         _userRepositoryMock = new Mock<IUserRepository>();
         _categoryRepositoryMock = new Mock<ICategoryRepository>();
         _cacheServiceMock = new Mock<ICacheService>();
+        _slugGeneratorMock = new Mock<ISlugGenerator>();
 
         var config = new MapperConfiguration(cfg => cfg.AddProfile<PostMappingProfile>());
         var mapper = config.CreateMapper();
@@ -34,6 +36,7 @@ public class PostServiceTests
             _userRepositoryMock.Object,
             _categoryRepositoryMock.Object,
             _cacheServiceMock.Object,
+            _slugGeneratorMock.Object,
             mapper
         );
     }
@@ -56,6 +59,7 @@ public class PostServiceTests
         var author = new User("John Doe", "john@example.com", "hash", "Author");
 
         _userRepositoryMock.Setup(r => r.GetByIdAsync(authorId)).ReturnsAsync(author);
+        _postRepositoryMock.Setup(r => r.GetBySlugAsync("test-post-title")).ReturnsAsync((Post?)null);
 
         _postRepositoryMock
             .Setup(r => r.AddAsync(It.IsAny<Post>()))
@@ -94,6 +98,7 @@ public class PostServiceTests
         var author = new User("John Doe", "john@example.com", "hash", "Author");
 
         _userRepositoryMock.Setup(r => r.GetByIdAsync(authorId)).ReturnsAsync(author);
+        _postRepositoryMock.Setup(r => r.GetBySlugAsync("valid-slug")).ReturnsAsync((Post?)null);
 
         var act = async () => await _postService.CreatePostAsync(dto, authorId);
 
@@ -108,6 +113,7 @@ public class PostServiceTests
         var author = new User("John Doe", "john@example.com", "hash", "Author");
 
         _userRepositoryMock.Setup(r => r.GetByIdAsync(authorId)).ReturnsAsync(author);
+        _postRepositoryMock.Setup(r => r.GetBySlugAsync("valid-slug")).ReturnsAsync((Post?)null);
 
         var act = async () => await _postService.CreatePostAsync(dto, authorId);
 
@@ -122,6 +128,7 @@ public class PostServiceTests
         var author = new User("John Doe", "john@example.com", "hash", "Author");
 
         _userRepositoryMock.Setup(r => r.GetByIdAsync(authorId)).ReturnsAsync(author);
+        _postRepositoryMock.Setup(r => r.GetBySlugAsync("valid-slug")).ReturnsAsync((Post?)null);
 
         var act = async () => await _postService.CreatePostAsync(dto, authorId);
 
@@ -136,6 +143,7 @@ public class PostServiceTests
         var author = new User("John Doe", "john@example.com", "hash", "Author");
 
         _userRepositoryMock.Setup(r => r.GetByIdAsync(authorId)).ReturnsAsync(author);
+        _postRepositoryMock.Setup(r => r.GetBySlugAsync("valid-slug")).ReturnsAsync((Post?)null);
 
         var act = async () => await _postService.CreatePostAsync(dto, authorId);
 
@@ -160,6 +168,7 @@ public class PostServiceTests
         var author = new User("John Doe", "john@example.com", "hash", "Author");
 
         _userRepositoryMock.Setup(r => r.GetByIdAsync(authorId)).ReturnsAsync(author);
+        _postRepositoryMock.Setup(r => r.GetBySlugAsync("test-post")).ReturnsAsync((Post?)null);
 
         _categoryRepositoryMock.Setup(r => r.GetByIdAsync(category1Id)).ReturnsAsync(category1);
         _categoryRepositoryMock.Setup(r => r.GetByIdAsync(category2Id)).ReturnsAsync(category2);
@@ -408,6 +417,7 @@ public class PostServiceTests
         var dto = new UpdatePostDto("New Title", "New content with enough characters", "new-slug");
 
         _postRepositoryMock.Setup(r => r.GetByIdAsync(postId)).ReturnsAsync(post);
+        _postRepositoryMock.Setup(r => r.GetBySlugAsync("new-slug")).ReturnsAsync((Post?)null);
 
         var result = await _postService.UpdatePostAsync(postId, dto);
 

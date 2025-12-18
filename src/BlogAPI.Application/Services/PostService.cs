@@ -13,13 +13,31 @@ public class PostService(
     IUserRepository userRepository,
     ICategoryRepository categoryRepository,
     ICacheService cacheService,
+    ISlugGenerator slugGenerator,
     IMapper mapper)
     : IPostService
 {
     public async Task<PostResponseDto> CreatePostAsync(CreatePostDto dto, Guid authorId)
     {
         var author = await userRepository.GetByIdAsync(authorId) ?? throw new DomainException("Author not found");
-        var post = new Post(dto.Title, dto.Content, dto.Slug, authorId);
+
+        string slug;
+        if (string.IsNullOrWhiteSpace(dto.Slug))
+        {
+            var baseSlug = slugGenerator.GenerateSlug(dto.Title);
+            slug = await slugGenerator.GenerateUniqueSlugAsync(baseSlug);
+        }
+        else
+        {
+            var existingPost = await postRepository.GetBySlugAsync(dto.Slug);
+            if (existingPost != null)
+            {
+                throw new DomainException($"Slug '{dto.Slug}' is already in use");
+            }
+            slug = dto.Slug;
+        }
+
+        var post = new Post(dto.Title, dto.Content, slug, authorId);
 
         var categories = new List<Category>();
 
@@ -109,7 +127,24 @@ public class PostService(
     {
         var post = await postRepository.GetByIdAsync(id) ?? throw new DomainException($"Post with ID {id} not found");
         var oldSlug = post.Slug;
-        post.Update(dto.Title, dto.Content, dto.Slug);
+
+        string newSlug;
+        if (string.IsNullOrWhiteSpace(dto.Slug))
+        {
+            var baseSlug = slugGenerator.GenerateSlug(dto.Title);
+            newSlug = await slugGenerator.GenerateUniqueSlugAsync(baseSlug, id);
+        }
+        else
+        {
+            var existingPost = await postRepository.GetBySlugAsync(dto.Slug);
+            if (existingPost != null && existingPost.Id != id)
+            {
+                throw new DomainException($"Slug '{dto.Slug}' is already in use");
+            }
+            newSlug = dto.Slug;
+        }
+
+        post.Update(dto.Title, dto.Content, newSlug);
 
         if (dto.CategoryIds is not null)
         {
@@ -130,9 +165,9 @@ public class PostService(
         await cacheService.RemoveByPatternAsync(CacheKeys.AllPosts());
         await cacheService.RemoveAsync(CacheKeys.PostById(id));
         await cacheService.RemoveAsync(CacheKeys.PostBySlug(oldSlug));
-        if (oldSlug != dto.Slug)
+        if (oldSlug != newSlug)
         {
-            await cacheService.RemoveAsync(CacheKeys.PostBySlug(dto.Slug));
+            await cacheService.RemoveAsync(CacheKeys.PostBySlug(newSlug));
         }
 
         return mapper.Map<PostResponseDto>(post);

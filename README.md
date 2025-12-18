@@ -419,4 +419,8 @@ Este projeto foi desenvolvido para fins educacionais e como parte do meu portfó
 ## Screenshots
 <img width="1892" height="943" alt="image" src="https://github.com/user-attachments/assets/d000ecc9-3d66-4a2a-8b9d-d88e74000acf" />
 <img width="1421" height="860" alt="image" src="https://github.com/user-attachments/assets/c0f1ff96-ca01-4aac-adbe-f1e79bed84d0" />
+<img width="1677" height="945" alt="image" src="https://github.com/user-attachments/assets/cfc30f6f-5797-4a8e-b4f8-00e94753c89c" />
+<img width="1679" height="947" alt="image" src="https://github.com/user-attachments/assets/4ea02c17-aec9-45d5-8031-4977d194379a" />
+<img width="1892" height="944" alt="image" src="https://github.com/user-attachments/assets/26c53155-f560-45a9-b1e9-664c9dfe2c0a" />
+<img width="817" height="836" alt="image" src="https://github.com/user-attachments/assets/aa1802d5-cf94-41b5-b773-69117a0dcec8" />
 

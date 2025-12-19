@@ -8,7 +8,9 @@ import {
 
 export default function PostCardSkeleton() {
   return (
-    <Card>
+    <Card className="relative overflow-hidden">
+      <div className="absolute inset-0 -translate-x-full animate-shimmer bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
       <CardHeader>
         <Skeleton className="h-6 w-3/4" />
         <div className="space-y-2 mt-2">

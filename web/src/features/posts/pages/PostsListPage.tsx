@@ -1,10 +1,12 @@
 import { useSearchParams } from "react-router";
+import { motion } from "framer-motion";
 import { usePosts } from "../hooks/usePost";
 import PostCard from "../components/PostCard";
 import PostCardSkeleton from "../components/PostCardSkeleton";
 import EmptyState from "../components/EmptyState";
 import Pagination from "../components/Pagination";
 import { Hero } from "@/shared/components/Hero";
+import { containerVariants, itemVariants } from "@/shared/lib/animations";
 
 export default function PostsListPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -60,11 +62,18 @@ export default function PostsListPage() {
 
           {data && data.items.length > 0 && (
             <div className="space-y-12">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <motion.div
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                variants={containerVariants}
+                initial="hidden"
+                animate="show"
+              >
                 {data.items.map((post) => (
-                  <PostCard key={post.id} post={post} />
+                  <motion.div key={post.id} variants={itemVariants}>
+                    <PostCard post={post} />
+                  </motion.div>
                 ))}
-              </div>
+              </motion.div>
 
               {data.totalPages > 1 && (
                 <div className="flex justify-center pt-8 border-t border-border">

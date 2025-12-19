@@ -1,5 +1,7 @@
 import { Link } from "react-router";
 import { User, Calendar, ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
+import { useInView } from "react-intersection-observer";
 import {
   Card,
   CardHeader,
@@ -22,8 +24,19 @@ export default function PostCard({ post }: PostCardProps) {
   const visibleCategories = post.categories.slice(0, 3);
   const remainingCount = post.categories.length - 3;
 
+  const { ref, inView } = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  });
+
   return (
-    <article className="group h-full">
+    <motion.article
+      ref={ref}
+      className="group h-full"
+      initial={{ opacity: 0, y: 20 }}
+      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
+    >
       <Card className="relative overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300 border border-border/50 bg-card/80 backdrop-blur-sm h-full flex flex-col">
         {/* Hover Gradient Background */}
         <div className="absolute inset-0 bg-linear-to-br from-brand/5 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -90,6 +103,6 @@ export default function PostCard({ post }: PostCardProps) {
           </CardFooter>
         </div>
       </Card>
-    </article>
+    </motion.article>
   );
 }

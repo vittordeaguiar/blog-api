@@ -1,10 +1,23 @@
+import { lazy, Suspense } from "react";
 import type { RouteObject } from "react-router-dom";
-import LoginPage from "@/features/auth/pages/LoginPage";
-import PostsListPage from "@/features/posts/pages/PostsListPage";
-import PostDetailPage from "@/features/posts/pages/PostDetailPage";
 import RootLayout from "@/shared/layouts/RootLayout";
-import CreatePostPage from "@/features/posts/pages/CreatePostPage";
 import ProtectedRoute from "./ProtectedRoute";
+
+const PostsListPage = lazy(() => import("@/features/posts/pages/PostsListPage"));
+const PostDetailPage = lazy(() => import("@/features/posts/pages/PostDetailPage"));
+const CreatePostPage = lazy(() => import("@/features/posts/pages/CreatePostPage"));
+const LoginPage = lazy(() => import("@/features/auth/pages/LoginPage"));
+
+function PageLoader() {
+  return (
+    <div className="flex items-center justify-center min-h-[60vh]">
+      <div className="flex flex-col items-center gap-4">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-brand border-t-transparent" />
+        <p className="text-sm text-muted-foreground">Carregando...</p>
+      </div>
+    </div>
+  );
+}
 
 export const routes: RouteObject[] = [
   {
@@ -13,22 +26,36 @@ export const routes: RouteObject[] = [
     children: [
       {
         index: true,
-        element: <PostsListPage />,
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <PostsListPage />
+          </Suspense>
+        ),
       },
       {
         path: "posts/:slug",
-        element: <PostDetailPage />,
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <PostDetailPage />
+          </Suspense>
+        ),
       },
       {
         path: "login",
-        element: <LoginPage />,
+        element: (
+          <Suspense fallback={<PageLoader />}>
+            <LoginPage />
+          </Suspense>
+        ),
       },
       {
         path: "posts/new",
         element: (
-          <ProtectedRoute>
-            <CreatePostPage />
-          </ProtectedRoute>
+          <Suspense fallback={<PageLoader />}>
+            <ProtectedRoute>
+              <CreatePostPage />
+            </ProtectedRoute>
+          </Suspense>
         ),
       },
     ],
